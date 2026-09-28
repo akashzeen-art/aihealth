@@ -1,0 +1,291 @@
+/* ─────────────────────────────────────────────────────────────
+   CareGuide app multipages — Demo UI palette (navy · lime · mist)
+   Applied to authenticated + guest non-landing routes
+   ───────────────────────────────────────────────────────────── */
+
+.app-shell.is-app,
+.app-shell.is-authenticated:not(.is-home) {
+  --teal: #21e6c1;
+  --teal-deep: #0f2537;
+  --teal-mid: #1ab89a;
+  --teal-soft: #d2faf2;
+  --mint: #cdef63;
+  --ink: #0f2537;
+  --slate: #0f2537;
+  --slate-muted: #576673;
+  --off-white: #f4f8fa;
+  --surface: rgba(255, 255, 255, 0.94);
+  --surface-solid: #ffffff;
+  --border: rgba(15, 37, 55, 0.12);
+  --shadow: 0 18px 48px rgba(15, 37, 55, 0.08);
+  --shadow-soft: 0 10px 28px rgba(15, 37, 55, 0.06);
+  --font-brand: 'Urbanist', 'Inter', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --mesh-a: rgba(205, 239, 99, 0.22);
+  --mesh-b: rgba(244, 248, 250, 0.7);
+  --mesh-c: rgba(15, 37, 55, 0.03);
+  background: var(--off-white);
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+
+.app-shell.is-app .app-main,
+.app-shell.is-authenticated:not(.is-home) .app-main {
+  background:
+    radial-gradient(ellipse 55% 40% at 92% 0%, color-mix(in srgb, #cdef63 28%, transparent), transparent 62%),
+    radial-gradient(ellipse 40% 35% at 6% 12%, color-mix(in srgb, #21e6c1 10%, transparent), transparent 70%),
+    var(--off-white);
+}
+
+.app-shell.is-app .page-pad h1,
+.app-shell.is-authenticated:not(.is-home) .page-pad h1,
+.app-shell.is-app .cg-hub-header h1,
+.app-shell.is-app .cg-history-header h1,
+.app-shell.is-app .cg-profile-hero h1,
+.app-shell.is-app .cg-workspace-welcome h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.app-shell.is-app .eyebrow,
+.app-shell.is-authenticated:not(.is-home) .eyebrow,
+.app-shell.is-app .home-clean-kicker {
+  color: var(--slate-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.app-shell.is-app .btn-primary,
+.app-shell.is-authenticated:not(.is-home) .btn-primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: 0 10px 28px rgba(15, 37, 55, 0.16);
+}
+
+.app-shell.is-app .btn-primary:hover,
+.app-shell.is-authenticated:not(.is-home) .btn-primary:hover {
+  background: color-mix(in srgb, var(--ink) 88%, #21e6c1);
+}
+
+.app-shell.is-app .btn-secondary,
+.app-shell.is-authenticated:not(.is-home) .btn-secondary {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+.app-shell.is-app .cg-chip,
+.app-shell.is-app .cg-quick-chip {
+  background: #fff;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.app-shell.is-app .cg-chip:hover,
+.app-shell.is-app .cg-quick-chip:hover,
+.app-shell.is-app .cg-chip:focus-visible,
+.app-shell.is-app .cg-quick-chip:focus-visible {
+  border-color: color-mix(in srgb, #cdef63 70%, var(--ink));
+  background: #f5fbdf;
+}
+
+.app-shell.is-app .cg-quick-composer {
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.app-shell.is-app .cg-quick-composer:focus-within {
+  border-color: color-mix(in srgb, #21e6c1 55%, var(--border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, #21e6c1 18%, transparent);
+}
+
+.app-shell.is-app .cg-workspace-atmosphere {
+  background:
+    radial-gradient(ellipse 70% 60% at 18% 28%, color-mix(in srgb, #cdef63 34%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 88% 18%, color-mix(in srgb, #21e6c1 14%, transparent), transparent 65%);
+}
+
+.app-shell.is-app .cg-hub-tile.is-selected,
+.app-shell.is-app .cg-hub-tile[aria-pressed='true'] {
+  border-color: color-mix(in srgb, #cdef63 65%, var(--ink));
+  box-shadow: 0 16px 40px rgba(15, 37, 55, 0.1);
+}
+
+.app-shell.is-app .cg-hub-preview-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.app-shell.is-app .cg-bottom-nav {
+  background: color-mix(in srgb, #fff 92%, #f4f8fa);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+.app-shell.is-app .cg-bottom-nav .bottom-nav-item.is-active .bottom-nav-indicator,
+.app-shell.is-app .cg-bottom-nav .bottom-nav-item.active .bottom-nav-indicator {
+  background: #cdef63;
+}
+
+.app-shell.is-app .cg-bottom-nav .bottom-nav-item.is-active,
+.app-shell.is-app .cg-bottom-nav .bottom-nav-item.active {
+  color: var(--ink);
+}
+
+.app-shell.is-app .cg-history-search input,
+.app-shell.is-app .cg-history-filter select,
+.app-shell.is-app .cg-profile-form input,
+.app-shell.is-app .cg-profile-form select,
+.app-shell.is-app .auth-panel input {
+  border-radius: 14px;
+  border-color: var(--border);
+  background: #fff;
+}
+
+.app-shell.is-app .cg-history-search input:focus,
+.app-shell.is-app .cg-history-filter select:focus,
+.app-shell.is-app .cg-profile-form input:focus,
+.app-shell.is-app .cg-profile-form select:focus,
+.app-shell.is-app .auth-panel input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, #21e6c1 50%, var(--border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, #21e6c1 16%, transparent);
+}
+
+.app-shell.is-app .form-panel,
+.app-shell.is-app .auth-panel,
+.app-shell.is-app .cg-doc-pane,
+.app-shell.is-app .cg-continue-item,
+.app-shell.is-app .cg-hub-preview-item,
+.app-shell.is-app .cg-history-row {
+  border-radius: 20px;
+}
+
+.app-shell.is-app .cg-api-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--slate-muted);
+  background: color-mix(in srgb, #fff 70%, #f5fbdf);
+  border: 1px solid var(--border);
+}
+
+.app-shell.is-app .cg-api-status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #21e6c1;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #21e6c1 22%, transparent);
+}
+
+.app-shell.is-app .cg-api-status.is-warn .cg-api-status-dot {
+  background: #c4a35a;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #c4a35a 22%, transparent);
+}
+
+/* Login multipage */
+.lp-login.cg-login-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: stretch;
+  min-height: min(78vh, 42rem);
+  max-width: 68rem;
+  margin: 1.25rem auto 2.5rem;
+  padding: 0 1.25rem;
+}
+
+.lp-login .cg-login-brand {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse 70% 55% at 85% 15%, color-mix(in srgb, #cdef63 42%, transparent), transparent 60%),
+    linear-gradient(155deg, #0f2537 0%, #16324a 55%, #1a3d4f 100%);
+  color: #f4f8fa;
+  box-shadow: 0 28px 60px rgba(15, 37, 55, 0.22);
+}
+
+.lp-login .cg-login-brand .eyebrow {
+  color: #cdef63;
+}
+
+.lp-login .cg-login-brand h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  line-height: 1.15;
+  margin: 0.5rem 0 1rem;
+  color: #fff;
+}
+
+.lp-login .cg-login-brand p {
+  color: color-mix(in srgb, #f4f8fa 82%, transparent);
+  max-width: 28rem;
+}
+
+.lp-login .lp-login-safety {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 0.88rem;
+  color: color-mix(in srgb, #cdef63 70%, #f4f8fa);
+}
+
+.lp-login .cg-login-panel-wrap {
+  display: grid;
+  align-content: center;
+}
+
+.lp-login .auth-panel {
+  background: #fff;
+  border: 1px solid rgba(15, 37, 55, 0.12);
+  border-radius: 28px;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  box-shadow: 0 18px 48px rgba(15, 37, 55, 0.08);
+}
+
+.lp-login .auth-panel h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  color: #0f2537;
+}
+
+.lp-login .auth-panel .btn-primary {
+  width: 100%;
+  margin-top: 0.35rem;
+  background: #0f2537;
+  border-color: #0f2537;
+}
+
+.lp-login .auth-panel .btn-primary:hover {
+  background: color-mix(in srgb, #0f2537 88%, #21e6c1);
+}
+
+@media (max-width: 860px) {
+  .lp-login.cg-login-split {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell.is-app .cg-api-status-dot {
+    box-shadow: none;
+  }
+}

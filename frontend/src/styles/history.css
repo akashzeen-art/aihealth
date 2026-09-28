@@ -1,0 +1,384 @@
+/* CareGuide history — Demo UI navy · lime · mist */
+
+.cg-hist-page {
+  --hist-navy: #0f2537;
+  --hist-lime: #cdef63;
+  --hist-teal: #21e6c1;
+  --hist-mist: #f4f8fa;
+  --hist-muted: #576673;
+  --hist-border: rgba(15, 37, 55, 0.12);
+  --hist-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  max-width: 52rem;
+  margin: 0 auto;
+  padding-bottom: 2.5rem;
+  color: var(--hist-navy);
+}
+
+.cg-hist-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: -1.25rem -8% auto;
+  height: 18rem;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 90% 18%, color-mix(in srgb, var(--hist-lime) 34%, transparent), transparent 68%),
+    radial-gradient(ellipse 40% 45% at 8% 40%, color-mix(in srgb, var(--hist-teal) 12%, transparent), transparent 70%);
+}
+
+.cg-hist-page > *:not(.cg-hist-glow) {
+  position: relative;
+  z-index: 1;
+}
+
+.cg-hist-hero {
+  margin-bottom: 1.2rem;
+}
+
+.cg-hist-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hist-muted);
+}
+
+.cg-hist-kicker-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--hist-lime);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--hist-lime) 28%, transparent);
+}
+
+.cg-hist-hero-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.85rem 1.25rem;
+}
+
+.cg-hist-hero h1 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-weight: 500;
+  font-size: clamp(1.8rem, 3.8vw, 2.45rem);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+
+.cg-hist-lead {
+  margin: 0;
+  max-width: 32rem;
+  color: var(--hist-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.cg-hist-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--hist-border);
+  background: color-mix(in srgb, #fff 86%, var(--hist-mist));
+}
+
+.cg-hist-count strong {
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.cg-hist-count span {
+  font-size: 0.82rem;
+  color: var(--hist-muted);
+  font-weight: 550;
+}
+
+.cg-hist-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 1.15rem;
+  padding: 0.75rem;
+  border-radius: 1.2rem;
+  background: #fff;
+  border: 1px solid var(--hist-border);
+  box-shadow: 0 12px 32px rgba(15, 37, 55, 0.05);
+}
+
+.cg-hist-search {
+  position: relative;
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.cg-hist-search-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--hist-muted);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.cg-hist-search input,
+.cg-hist-filter select {
+  width: 100%;
+  border: 1px solid var(--hist-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--hist-mist) 55%, #fff);
+  padding: 0.75rem 1rem;
+  font: inherit;
+  color: var(--hist-navy);
+  transition:
+    border-color 160ms var(--hist-ease),
+    box-shadow 160ms var(--hist-ease),
+    background 160ms var(--hist-ease);
+}
+
+.cg-hist-search input {
+  padding-inline-start: 2.35rem;
+}
+
+.cg-hist-filter {
+  flex: 0 1 12rem;
+}
+
+.cg-hist-search input:focus,
+.cg-hist-filter select:focus {
+  outline: none;
+  background: #fff;
+  border-color: color-mix(in srgb, var(--hist-teal) 45%, var(--hist-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--hist-teal) 16%, transparent);
+}
+
+.cg-hist-empty {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  text-align: center;
+  padding: 2.25rem 1.25rem;
+  border-radius: 1.35rem;
+  background: #fff;
+  border: 1px solid var(--hist-border);
+  box-shadow: 0 14px 36px rgba(15, 37, 55, 0.05);
+}
+
+.cg-hist-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--hist-lime) 42%, #fff);
+  color: var(--hist-navy);
+  font-size: 1.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.cg-hist-empty h2 {
+  margin: 0;
+  font-family: var(--font-display, 'Fraunces', Georgia, serif);
+  font-weight: 500;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.cg-hist-empty p {
+  margin: 0;
+  max-width: 28rem;
+  color: var(--hist-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.cg-hist-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+  margin-top: 0.55rem;
+}
+
+.cg-hist-timeline {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.cg-hist-day {
+  margin: 0 0 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hist-muted);
+}
+
+.cg-hist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.cg-hist-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0.45rem;
+  border-radius: 1.15rem;
+  background: #fff;
+  border: 1px solid var(--hist-border);
+  box-shadow: 0 10px 28px rgba(15, 37, 55, 0.04);
+  transition:
+    border-color 160ms var(--hist-ease),
+    box-shadow 160ms var(--hist-ease),
+    transform 160ms var(--hist-ease);
+}
+
+.cg-hist-card:hover {
+  border-color: color-mix(in srgb, var(--hist-lime) 55%, var(--hist-border));
+  box-shadow: 0 14px 34px rgba(15, 37, 55, 0.08);
+  transform: translateY(-1px);
+}
+
+.cg-hist-card.is-confirming {
+  border-color: color-mix(in srgb, #b42318 28%, var(--hist-border));
+  background: color-mix(in srgb, #b42318 4%, #fff);
+}
+
+.cg-hist-open {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.65rem 0.7rem;
+  border-radius: 0.95rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 160ms var(--hist-ease);
+}
+
+.cg-hist-open:hover,
+.cg-hist-open:focus-visible {
+  background: color-mix(in srgb, var(--hist-mist) 70%, #fff);
+  text-decoration: none;
+}
+
+.cg-hist-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--hist-teal);
+}
+
+.cg-hist-dot.accent-coral { background: #d46a5c; }
+.cg-hist-dot.accent-rose { background: #c06b8a; }
+.cg-hist-dot.accent-leaf { background: #4f8f6a; }
+.cg-hist-dot.accent-sky { background: #4a8fb8; }
+.cg-hist-dot.accent-slate { background: #6b7a86; }
+
+.cg-hist-copy {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.cg-hist-copy strong {
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cg-hist-copy span {
+  font-size: 0.8rem;
+  color: var(--hist-muted);
+}
+
+.cg-hist-go {
+  color: var(--hist-muted);
+  font-size: 1.05rem;
+  transition: transform 160ms var(--hist-ease), color 160ms var(--hist-ease);
+}
+
+.cg-hist-open:hover .cg-hist-go,
+.cg-hist-open:focus-visible .cg-hist-go {
+  color: var(--hist-navy);
+  transform: translateX(3px);
+}
+
+.cg-hist-delete {
+  margin-inline-end: 0.25rem;
+}
+
+.cg-hist-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 550;
+  color: #8f1d15;
+}
+
+@media (max-width: 640px) {
+  .cg-hist-card {
+    grid-template-columns: 1fr;
+  }
+
+  .cg-hist-delete,
+  .cg-hist-confirm {
+    margin: 0 0.35rem 0.45rem;
+  }
+
+  .cg-hist-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cg-hist-filter {
+    flex: 1 1 auto;
+  }
+
+  .cg-hist-empty-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cg-hist-empty-actions .cg-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cg-hist-card,
+  .cg-hist-open,
+  .cg-hist-go,
+  .cg-hist-search input,
+  .cg-hist-filter select {
+    transition: none !important;
+  }
+
+  .cg-hist-card:hover,
+  .cg-hist-open:hover .cg-hist-go {
+    transform: none !important;
+  }
+}
