@@ -1,14 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
-import { useAuthStore } from './store/authStore'
+import { useCallback, useState } from 'react'
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import Preloader, { hasSeenPreloader } from './components/common/Preloader'
 import SafetyOnboardingGate from './components/common/SafetyOnboardingGate'
 import ScrollToTop from './components/common/ScrollToTop'
@@ -26,23 +17,6 @@ import SafetyPage from './pages/SafetyPage'
 import SignupPage from './pages/SignupPage'
 import TrackerPage from './pages/TrackerPage'
 
-function SignupAfterPreloader() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const signedUp = useAuthStore((s) => s.signedUp)
-  const done = useRef(false)
-
-  useEffect(() => {
-    if (done.current) return
-    done.current = true
-    if (signedUp || location.pathname === '/signup') return
-    const from = `${location.pathname}${location.search}${location.hash}`
-    navigate('/signup', { replace: true, state: { from, intro: true } })
-  }, [location, navigate, signedUp])
-
-  return null
-}
-
 function SafetyLayout() {
   return (
     <SafetyOnboardingGate>
@@ -53,7 +27,6 @@ function SafetyLayout() {
 
 export default function App() {
   const [ready, setReady] = useState(() => hasSeenPreloader())
-  const [showedPreloader] = useState(() => !hasSeenPreloader())
   const handlePreloaderDone = useCallback(() => setReady(true), [])
 
   if (!ready) {
@@ -63,7 +36,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      {showedPreloader ? <SignupAfterPreloader /> : null}
       <Routes>
         <Route element={<AppShell />}>
           <Route path="signup" element={<SignupPage />} />
@@ -82,9 +54,8 @@ export default function App() {
             <Route path="reminders" element={<RemindersPage />} />
             <Route path="tracker" element={<TrackerPage />} />
 
-            <Route path="assistant/:assistantType" element={<AssistantDetailPage />} />
             <Route
-              path="assistant/:assistantType/:conversationId"
+              path="assistant/:assistantType/:conversationId?"
               element={<AssistantDetailPage />}
             />
 

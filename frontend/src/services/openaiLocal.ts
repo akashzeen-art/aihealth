@@ -1,5 +1,6 @@
 import { buildSystemPrompt } from '../prompts/assistantPrompts'
 import { ApiError } from './apiClient'
+import { detectDiet, dietConstraint, dietCorrection } from '../utils/dietGuard'
 
 export interface ChatTurn {
   role: 'user' | 'assistant' | 'system'
@@ -9,6 +10,24 @@ export interface ChatTurn {
 interface OpenAIChatResponse {
   choices?: Array<{ message?: { content?: string } }>
   error?: { message?: string }
+}
+
+const REFUSAL_PATTERN = /\b(can only help with|only help with|outside (of )?my scope|within my scope)\b/i
+
+/** Earlier short scope refusals make the model keep refusing; leave them out of the context. */
+function withoutPastRefusals(history: ChatTurn[]): ChatTurn[] {
+  return history.filter(
+    (turn) =>
+      turn.role !== 'assistant' || turn.content.length > 500 || !REFUSAL_PATTERN.test(turn.content),
+  )
+}
+
+function deviceTimeZone(): string | null {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || null
+  } catch {
+    return null
+  }
 }
 
 function openaiBaseUrl(): string {
@@ -32,20 +51,50 @@ export async function completeChat(options: {
     )
   }
 
-  const system = buildSystemPrompt({
+  let system = buildSystemPrompt({
     assistantCode: options.assistantCode,
     language: options.language,
     country: options.country,
+    timeZone: deviceTimeZone(),
     documentContext: options.documentContext,
     userDataContext: options.userDataContext,
   })
 
+  const diet = detectDiet(
+    options.history.filter((turn) => turn.role === 'user').map((turn) => turn.content),
+  )
+  if (diet) system += `\n\n${dietConstraint(diet)}`
+
+  const messages: ChatTurn[] = [
+    { role: 'system', content: system },
+    ...withoutPastRefusals(options.history),
+  ]
+  const reply = await requestCompletion(apiKey, messages, options.signal)
+  if (!diet) return reply
+
+  const correction = dietCorrection(reply, diet)
+  if (!correction) return reply
+
+  const retry = await requestCompletion(
+    apiKey,
+    [...messages, { role: 'assistant', content: reply }, { role: 'user', content: correction }],
+    options.signal,
+  )
+  return retry
+}
+
+async function requestCompletion(
+  apiKey: string,
+  messages: ChatTurn[],
+  signal?: AbortSignal,
+): Promise<string> {
   const model = import.meta.env.VITE_OPENAI_MODEL?.trim() || 'gpt-4o-mini'
   const body = {
     model,
     temperature: 0.3,
-    messages: [{ role: 'system', content: system }, ...options.history],
+    messages,
   }
+  const options = { signal }
 
   let res: Response
   try {

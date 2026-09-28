@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useMedicalSafetyStore } from '../../store/medicalSafetyStore'
 import type { AssistantType } from '../../types'
 import LoadingSpinner from './LoadingSpinner'
+import { scrollPageToTop } from './ScrollToTop'
 
 interface AssistantSafetyGateProps {
   assistantType: AssistantType
@@ -45,6 +46,7 @@ export default function AssistantSafetyGate({
     if (!checked) return
     acknowledgeAssistant(assistantType)
     bump((n) => n + 1)
+    scrollPageToTop()
   }
 
   return (

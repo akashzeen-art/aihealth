@@ -5,8 +5,14 @@ import { useReducedMotion } from '../../hooks/useReducedMotion'
 /**
  * Subtle enter transition for route content. Does not block rendering.
  */
+/** Chat URLs differ only by conversation id; keep them as one page so an in-flight reply is not lost. */
+function pageKey(pathname: string): string {
+  const chat = pathname.match(/^\/assistant\/[^/]+/)
+  return chat ? chat[0] : pathname
+}
+
 export default function PageTransition({ children }: { children: ReactNode }) {
-  const { pathname } = useLocation()
+  const pathname = pageKey(useLocation().pathname)
   const reduced = useReducedMotion()
   const [key, setKey] = useState(pathname)
   const [phase, setPhase] = useState<'in' | 'idle'>('in')

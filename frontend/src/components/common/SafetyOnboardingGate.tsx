@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useMedicalSafetyStore } from '../../store/medicalSafetyStore'
 import LoadingSpinner from './LoadingSpinner'
+import { scrollPageToTop } from './ScrollToTop'
 import { BRAND } from '../../brand'
 
 export default function SafetyOnboardingGate({ children }: { children: ReactNode }) {
@@ -33,6 +34,7 @@ export default function SafetyOnboardingGate({ children }: { children: ReactNode
     if (!checked) return
     acknowledgeOnboarding()
     bump((n) => n + 1)
+    scrollPageToTop()
   }
 
   return (

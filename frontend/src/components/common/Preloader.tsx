@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { BRAND } from '../../brand'
 
-const MIN_MS = 5000
+const PRELOADER_VIDEO =
+  'https://vz-8b335ac6-acc.b-cdn.net/d55ac4f5-7cfa-4512-95ae-ec6f03a5af0d/play_720p.mp4'
+const START_TIMEOUT_MS = 6000
+const MAX_MS = 20000
 const PRELOADER_KEY = 'careguide_preloader_seen'
 
 export function hasSeenPreloader(): boolean {
@@ -20,71 +23,60 @@ function markPreloaderSeen() {
   }
 }
 
-/** Full-screen splash — shown once on first website visit. */
+/** Full-screen video splash — shown once on first website visit. */
 export default function Preloader({ onDone }: { onDone: () => void }) {
   const [leaving, setLeaving] = useState(false)
+  const [started, setStarted] = useState(false)
+  const doneRef = useRef(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
-  useEffect(() => {
-    const start = Date.now()
-    const finish = () => {
-      const wait = Math.max(0, MIN_MS - (Date.now() - start))
-      window.setTimeout(() => {
-        setLeaving(true)
-        markPreloaderSeen()
-        window.setTimeout(onDone, 420)
-      }, wait)
-    }
-
-    if (document.readyState === 'complete') {
-      finish()
-    } else {
-      window.addEventListener('load', finish, { once: true })
-      window.setTimeout(finish, MIN_MS + 400)
-    }
+  const finish = useCallback(() => {
+    if (doneRef.current) return
+    doneRef.current = true
+    setLeaving(true)
+    markPreloaderSeen()
+    window.setTimeout(onDone, 500)
   }, [onDone])
 
+  useEffect(() => {
+    const maxTimer = window.setTimeout(finish, MAX_MS)
+    return () => window.clearTimeout(maxTimer)
+  }, [finish])
+
+  useEffect(() => {
+    if (started) return
+    const startTimer = window.setTimeout(finish, START_TIMEOUT_MS)
+    return () => window.clearTimeout(startTimer)
+  }, [started, finish])
+
+  useEffect(() => {
+    videoRef.current?.play().catch(finish)
+  }, [finish])
+
   return (
-    <div className={`preloader ${leaving ? 'is-leaving' : ''}`} role="status" aria-live="polite">
-      <div className="loading-window" aria-hidden="true">
-        <div className="ambulance-scene">
-          <div className="ambulance">
-            <div className="strike" />
-            <div className="strike strike2" />
-            <div className="strike strike3" />
-            <div className="strike strike4" />
-            <div className="strike strike5" />
-            <div className="strike strike6" />
-
-            <div className="ambulance-detail light" />
-            <div className="ambulance-detail light-glow" />
-            <div className="ambulance-detail roof" />
-            <div className="ambulance-detail body" />
-            <div className="ambulance-detail cabin" />
-            <div className="ambulance-detail hood" />
-            <div className="ambulance-detail window" />
-            <div className="ambulance-detail window-line" />
-            <div className="ambulance-detail bumper" />
-            <div className="ambulance-detail grill" />
-            <div className="ambulance-detail cross-badge" />
-            <div className="ambulance-detail cross-v" />
-            <div className="ambulance-detail cross-h" />
-            <div className="ambulance-detail door-line" />
-            <div className="ambulance-detail wheel wheel1" />
-            <div className="ambulance-detail wheel wheel2" />
-            <div className="ambulance-detail hub hub1" />
-            <div className="ambulance-detail hub hub2" />
-          </div>
-          <div className="ambulance-road" />
-        </div>
-
-        <div className="loading-text">
-          <span>Loading</span>
-          <span className="dots">...</span>
-        </div>
-      </div>
-
-      <p className="preloader-brand">{BRAND.name}</p>
-      <p className="preloader-hint">Getting your care space ready</p>
+    <div
+      className={`preloader preloader-video ${leaving ? 'is-leaving' : ''}`}
+      role="status"
+      aria-live="polite"
+    >
+      <video
+        ref={videoRef}
+        className="preloader-video-media"
+        src={PRELOADER_VIDEO}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        onPlaying={() => setStarted(true)}
+        onEnded={finish}
+        onError={finish}
+        aria-hidden="true"
+      />
+      {!started && <span className="preloader-video-spinner" aria-hidden="true" />}
+      <button type="button" className="preloader-skip" onClick={finish}>
+        Skip
+        <span aria-hidden="true"> →</span>
+      </button>
       <span className="sr-only">Loading {BRAND.name}</span>
     </div>
   )

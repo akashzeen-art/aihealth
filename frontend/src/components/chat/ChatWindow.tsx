@@ -225,7 +225,7 @@ export default function ChatWindow({
           </div>
         </form>
         <p className="cg-composer-hint">
-          Enter to send · Shift+Enter for a new line · Educational guidance only
+          Educational guidance only
         </p>
       </div>
     </section>

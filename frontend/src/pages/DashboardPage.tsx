@@ -6,17 +6,20 @@ import DisclaimerBanner from '../components/common/DisclaimerBanner'
 import ContentSkeleton from '../components/ai/ContentSkeleton'
 import EmptyState from '../components/ai/EmptyState'
 import FeatureCards from '../landing/FeatureCards'
-import HowItWorks from '../landing/HowItWorks'
 import LanguageShowcase from '../landing/LanguageShowcase'
 import SafetySection from '../landing/SafetySection'
 import { BRAND } from '../brand'
 import { useAuthStore } from '../store/authStore'
 import { useEngagementStore } from '../store/engagementStore'
-import { assistantPath, getAssistantById, type AssistantSlug } from '../utils/assistants'
+import {
+  assistantPath,
+  conversationUrlId,
+  getAssistantById,
+  type AssistantSlug,
+} from '../utils/assistants'
 import {
   dayAtmosphere,
   displayConversationTitle,
-  greetingForNow,
   languageLabel,
 } from '../utils/assistantExperience'
 import { weeklyRecapStats } from '../utils/engagement'
@@ -102,11 +105,6 @@ export default function DashboardPage() {
     return () => controller.abort()
   }, [])
 
-  const displayName = user?.name?.trim()
-  const firstName = displayName?.split(/\s+/)[0]
-  const welcomeLine = firstName
-    ? `${greetingForNow()}, ${firstName}`
-    : greetingForNow()
   const lang = user?.preferredLanguage || 'en'
   const atmosphere = dayAtmosphere()
   const progress = checklistProgress()
@@ -133,7 +131,7 @@ export default function DashboardPage() {
     const catalog = getAssistantById(c.assistantType)
     return catalog
       ? assistantPath(catalog.slug, c.id)
-      : `/assistant/${c.assistantType.toLowerCase()}/${c.id}`
+      : `/assistant/${c.assistantType.toLowerCase()}/${conversationUrlId(c.id)}`
   }
 
   function handleComposer(e: FormEvent) {
@@ -173,34 +171,26 @@ export default function DashboardPage() {
         <div className="cg-dash-scene-orb cg-dash-scene-orb-b" />
       </div>
 
+      <div className="cg-home-stage">
+      <div className="cg-home-stage-fx" aria-hidden="true">
+        <span className="cg-home-orb cg-home-orb-a" />
+        <span className="cg-home-orb cg-home-orb-b" />
+        <span className="cg-home-orb cg-home-orb-c" />
+        <span className="cg-home-grid" />
+      </div>
       <header className="cg-dash-hero">
         <div className="cg-dash-hero-copy">
-          <p className="cg-dash-kicker">
-            <span className="cg-dash-kicker-dot" aria-hidden="true" />
-            {welcomeLine}
+          <p className="cg-home-eyebrow">
+            <span className="cg-home-eyebrow-dot" aria-hidden="true" />
+            Your AI health companion
           </p>
-          <h1>What would you like to understand?</h1>
+          <h1>
+            What would you like to <em>understand</em>?
+          </h1>
           <p className="cg-dash-lead">
             Your {BRAND.shortName} space for plain-language health education — not a clinic or
             diagnosis tool.
           </p>
-        </div>
-
-        <div className="cg-dash-hero-visual" aria-hidden="true">
-          <div className="cg-dash-hero-frame">
-            <img
-              src="/images/dash-hero-bg.png"
-              alt=""
-              width={640}
-              height={360}
-              decoding="async"
-            />
-            <div className="cg-dash-hero-frame-shine" />
-            <span className="cg-dash-hero-badge">
-              <DashIcon name="compass" />
-              Clarity first
-            </span>
-          </div>
         </div>
 
         <div className="cg-dash-hero-meta">
@@ -270,6 +260,22 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
+
+      <ul className="cg-home-stats" aria-label="What CareGuide offers">
+        <li>
+          <strong>15</strong>
+          <span>specialist assistants</span>
+        </li>
+        <li>
+          <strong>5</strong>
+          <span>languages</span>
+        </li>
+        <li>
+          <strong>24/7</strong>
+          <span>available</span>
+        </li>
+      </ul>
+      </div>
 
       <DisclaimerBanner />
 
@@ -400,41 +406,6 @@ export default function DashboardPage() {
             )}
           </section>
 
-          <section className="cg-dash-panel cg-engage-journeys" aria-labelledby="journeys-heading">
-            <div className="cg-dash-panel-head">
-              <h2 id="journeys-heading">
-                <DashIcon name="journey" className="cg-dash-panel-ico" />
-                Guided journeys
-              </h2>
-              <span>Short educational paths</span>
-            </div>
-            <ul className="cg-engage-journey-grid">
-              {GUIDED_JOURNEYS.map((journey) => {
-                const iconName =
-                  JOURNEY_ICONS[journey.id as keyof typeof JOURNEY_ICONS] ?? 'compass'
-                return (
-                  <li key={journey.id}>
-                    <button
-                      type="button"
-                      className={`cg-engage-journey-card accent-${journey.accent}`}
-                      onClick={() => startJourney(journey.id)}
-                    >
-                      <span className="cg-engage-journey-ico">
-                        <DashIcon name={iconName} />
-                      </span>
-                      <strong>{journey.title}</strong>
-                      <span>{journey.blurb}</span>
-                      <em>
-                        Start
-                        <span aria-hidden="true"> →</span>
-                      </em>
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
-
           {(bookmarks.length > 0 || documentInsights.length > 0) && (
             <section className="cg-dash-panel cg-engage-saved" aria-labelledby="saved-heading">
               <div className="cg-dash-panel-head">
@@ -526,7 +497,42 @@ export default function DashboardPage() {
 
     <div className="lp-landing cg-home-story">
       <FeatureCards />
-      <HowItWorks />
+      <div className="cg-dash cg-home-journeys">
+        <section className="cg-dash-panel cg-engage-journeys" aria-labelledby="journeys-heading">
+          <div className="cg-dash-panel-head">
+            <h2 id="journeys-heading">
+              <DashIcon name="journey" className="cg-dash-panel-ico" />
+              Guided journeys
+            </h2>
+            <span>Short educational paths</span>
+          </div>
+          <ul className="cg-engage-journey-grid">
+            {GUIDED_JOURNEYS.map((journey) => {
+              const iconName =
+                JOURNEY_ICONS[journey.id as keyof typeof JOURNEY_ICONS] ?? 'compass'
+              return (
+                <li key={journey.id}>
+                  <button
+                    type="button"
+                    className={`cg-engage-journey-card accent-${journey.accent}`}
+                    onClick={() => startJourney(journey.id)}
+                  >
+                    <span className="cg-engage-journey-ico">
+                      <DashIcon name={iconName} />
+                    </span>
+                    <strong>{journey.title}</strong>
+                    <span>{journey.blurb}</span>
+                    <em>
+                      Start
+                      <span aria-hidden="true"> →</span>
+                    </em>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      </div>
       <LanguageShowcase />
       <SafetySection />
     </div>

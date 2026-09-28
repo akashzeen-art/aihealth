@@ -7,12 +7,11 @@ import { LANGUAGE_OPTIONS } from '../utils/assistants'
 import { getErrorMessage } from '../utils/errors'
 import { BRAND } from '../brand'
 
-type SignupNavState = { from?: string; intro?: boolean } | null
+type SignupNavState = { from?: string } | null
 
 export default function SignupPage() {
   const navigate = useNavigate()
   const navState = useLocation().state as SignupNavState
-  const intro = Boolean(navState?.intro)
   const returnTo =
     navState?.from && navState.from.startsWith('/') && navState.from !== '/signup'
       ? navState.from
@@ -28,7 +27,10 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
 
-  if (signedUp) return <Navigate to="/profile" replace />
+  // Only redirect people who were already signed up when they opened this page;
+  // otherwise completing the form would bounce them to Profile instead of returnTo.
+  const [signedUpOnArrival] = useState(signedUp)
+  if (signedUpOnArrival) return <Navigate to="/profile" replace />
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -61,8 +63,8 @@ export default function SignupPage() {
   return (
     <div className="page-pad cg-tools-page cg-signup-page animate-fade-up">
       <header className="cg-tools-hero">
-        <p className="cg-tools-kicker">{intro ? `Welcome to ${BRAND.name}` : 'Sign up'}</p>
-        <h1>{intro ? 'Let’s set up your care space' : `Make ${BRAND.name} yours`}</h1>
+        <p className="cg-tools-kicker">Sign up</p>
+        <h1>Make {BRAND.name} yours</h1>
         <p className="cg-tools-lead">
           Optional — you can already use every feature. Signing up lets assistants greet you by name,
           reply in your language, and use local examples for your country. Your details stay in this
@@ -77,7 +79,7 @@ export default function SignupPage() {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Pooja Jain"
+              placeholder="e.g. Demo"
               autoComplete="name"
               maxLength={60}
               required

@@ -96,9 +96,10 @@ export default function FeatureCards() {
             if (!item) return null
             const isActive = i === active
             return (
-              <button
+              <div
                 key={item.slug}
-                type="button"
+                role="button"
+                tabIndex={0}
                 className={`lp-feat-option${isActive ? ' is-active' : ''}`}
                 style={
                   {
@@ -107,18 +108,33 @@ export default function FeatureCards() {
                   } as CSSProperties
                 }
                 aria-expanded={isActive}
-                aria-label={isActive ? `Open ${item.name}` : item.name}
-                onClick={() => (isActive ? open(item) : setActive(i))}
-                onFocus={() => setActive(i)}
+                aria-label={item.name}
+                onClick={() => setActive(i)}
+                onKeyDown={(e) => {
+                  if (e.target !== e.currentTarget) return
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setActive(i)
+                  }
+                }}
               >
                 <span className="lp-feat-art" aria-hidden="true">
                   {assistantIcons[item.iconKey]}
                 </span>
                 <span className="lp-feat-top" aria-hidden={!isActive}>
                   <span className="lp-feat-desc">{item.description}</span>
-                  <span className="lp-feat-cta">
+                  <button
+                    type="button"
+                    className="lp-feat-cta"
+                    tabIndex={isActive ? 0 : -1}
+                    aria-label={`Open ${item.name}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      open(item)
+                    }}
+                  >
                     Open assistant →
-                  </span>
+                  </button>
                 </span>
                 <span className="lp-feat-shadow" aria-hidden="true" />
                 <span className="lp-feat-label">
@@ -130,7 +146,7 @@ export default function FeatureCards() {
                     <span className="lp-feat-sub">For {item.target}</span>
                   </span>
                 </span>
-              </button>
+              </div>
             )
           })}
         </div>

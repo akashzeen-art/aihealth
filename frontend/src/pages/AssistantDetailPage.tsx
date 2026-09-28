@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import '../styles/chat.css'
 import { getErrorMessage } from '../utils/errors'
@@ -11,6 +11,7 @@ import {
   uploadDocument,
   updateProfile,
 } from '../services/api'
+import { resolveConversationId } from '../services/conversationService'
 import { assistantIcons } from '../components/assistants/assistantIcons'
 import ConversationSidebar from '../components/chat/ConversationSidebar'
 import ChatWindow from '../components/chat/ChatWindow'
@@ -40,11 +41,24 @@ type ChatNavState = {
 }
 
 export default function AssistantDetailPage() {
-  const { assistantType: slug = '', conversationId } = useParams()
+  const { assistantType: slug = '', conversationId: urlConversationId } = useParams()
+  const conversationId = useMemo(
+    () => resolveConversationId(urlConversationId),
+    [urlConversationId],
+  )
   const navigate = useNavigate()
   const location = useLocation()
+  const justCreatedRef = useRef<string | null>(null)
   const catalog = getAssistantBySlug(slug)
   const experience = getExperience(slug)
+
+  useEffect(() => {
+    if (!catalog || !conversationId || !urlConversationId) return
+    const short = assistantPath(catalog.slug, conversationId)
+    if (location.pathname !== short) {
+      navigate(short, { replace: true, state: location.state })
+    }
+  }, [catalog, conversationId, urlConversationId, location.pathname, location.state, navigate])
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
 
@@ -109,6 +123,10 @@ export default function AssistantDetailPage() {
   useEffect(() => {
     if (!conversationId || !catalog) {
       setMessages([])
+      return
+    }
+    if (justCreatedRef.current === conversationId) {
+      justCreatedRef.current = null
       return
     }
     let cancelled = false
@@ -228,6 +246,7 @@ export default function AssistantDetailPage() {
         const created = await createConversation(catalog.id, content.slice(0, 60))
         setConversations((prev) => [created, ...prev])
         activeId = created.id
+        justCreatedRef.current = created.id
         navigate(assistantPath(catalog.slug, created.id), { replace: true })
       }
 
@@ -445,6 +464,7 @@ export default function AssistantDetailPage() {
             />
           }
           toolbar={
+            catalog.tool || catalog.supportsDocuments || conversationId || messages.length > 0 || briefStatus ? (
             <header className="assistant-detail-toolbar">
               <div className="toolbar-actions">
                 {catalog.tool ? (
@@ -489,16 +509,17 @@ export default function AssistantDetailPage() {
                     </Button>
                   </>
                 ) : null}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="cg-btn cg-btn-ghost cg-btn-sm"
-                  onClick={() => void handleClearConversation()}
-                  disabled={!conversationId && messages.length === 0}
-                  aria-label="Clear conversation"
-                >
-                  Clear
-                </Button>
+                {conversationId || messages.length > 0 ? (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="cg-btn cg-btn-ghost cg-btn-sm"
+                    onClick={() => void handleClearConversation()}
+                    aria-label="Clear conversation"
+                  >
+                    Clear
+                  </Button>
+                ) : null}
               </div>
               {briefStatus ? (
                 <p className="cg-brief-status" role="status">
@@ -506,6 +527,7 @@ export default function AssistantDetailPage() {
                 </p>
               ) : null}
             </header>
+            ) : null
           }
           attachControl={
             catalog.supportsDocuments ? (

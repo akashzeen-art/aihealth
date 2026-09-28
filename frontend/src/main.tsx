@@ -4,6 +4,8 @@ import { hydrateStorageGuard } from './local/db'
 import { hydrateEngagementForSession } from './store/engagementStore'
 import './index.css'
 import App from './App.tsx'
+import './styles/theme.css'
+import './styles/home.css'
 
 hydrateStorageGuard()
 hydrateEngagementForSession()

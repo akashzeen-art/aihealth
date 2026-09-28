@@ -2328,6 +2328,66 @@ a:focus-visible,
   pointer-events: none;
 }
 
+.preloader.preloader-video {
+  background: #000;
+  display: block;
+  padding: 0;
+  transition: opacity 500ms ease, visibility 500ms ease;
+}
+
+.preloader-video-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.preloader-video-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin: -1.3rem 0 0 -1.3rem;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #cdef63;
+  animation: preloader-spin 0.9s linear infinite;
+}
+
+@keyframes preloader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.preloader-skip {
+  position: absolute;
+  right: 1.25rem;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 2;
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.preloader-skip:hover,
+.preloader-skip:focus-visible {
+  background: #cdef63;
+  border-color: #cdef63;
+  color: #0f2537;
+}
+
 .preloader-brand {
   font-family: var(--font-brand);
   font-weight: 700;

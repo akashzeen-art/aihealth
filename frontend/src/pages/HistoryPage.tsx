@@ -5,6 +5,7 @@ import { getErrorMessage } from '../utils/errors'
 import ContentSkeleton from '../components/ai/ContentSkeleton'
 import {
   assistantPath,
+  conversationUrlId,
   getAssistantById,
   ASSISTANT_CATALOG,
   type AssistantSlug,
@@ -253,7 +254,7 @@ export default function HistoryPage() {
                   const catalog = getAssistantById(c.assistantType)
                   const to = catalog
                     ? assistantPath(catalog.slug, c.id)
-                    : `/assistant/${c.assistantType.toLowerCase()}/${c.id}`
+                    : `/assistant/${c.assistantType.toLowerCase()}/${conversationUrlId(c.id)}`
                   const confirming = pendingDelete === c.id
                   const pinned = pinnedConversations.includes(c.id)
                   return (

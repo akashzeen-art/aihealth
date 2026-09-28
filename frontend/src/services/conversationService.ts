@@ -1,5 +1,5 @@
 import { readUserData, requireCurrentUser, writeUserData } from '../local/db'
-import { newId } from '../local/ids'
+import { shortId } from '../local/ids'
 import { ApiError, withApi, type ApiCallOptions } from './apiClient'
 import type { AssistantType, Conversation, ConversationSummary } from '../types'
 
@@ -10,6 +10,20 @@ function toSummary(c: Conversation): ConversationSummary {
     title: c.title,
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
+  }
+}
+
+/** Maps a short URL id back to the stored conversation id (older ids are `conv_<uuid>`). */
+export function resolveConversationId(urlId: string | undefined): string | undefined {
+  if (!urlId) return undefined
+  try {
+    const data = readUserData(requireCurrentUser().id)
+    const match =
+      data.conversations.find((c) => c.id === urlId) ??
+      data.conversations.find((c) => c.id.startsWith(`conv_${urlId}`))
+    return match?.id ?? urlId
+  } catch {
+    return urlId
   }
 }
 
@@ -39,8 +53,11 @@ export async function createConversation(
     const user = requireCurrentUser()
     const data = readUserData(user.id)
     const now = new Date().toISOString()
+    const taken = new Set(data.conversations.map((c) => c.id))
+    let id = shortId()
+    while (taken.has(id)) id = shortId()
     const conversation: Conversation = {
-      id: newId('conv'),
+      id,
       assistantType: assistantType.toUpperCase(),
       title: title?.trim() || 'New chat',
       createdAt: now,

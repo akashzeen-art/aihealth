@@ -11,6 +11,13 @@ function jumpToTop() {
   root.style.scrollBehavior = previous
 }
 
+/** Jumps to the top after the next render, for screens that swap content without a route change. */
+export function scrollPageToTop() {
+  jumpToTop()
+  requestAnimationFrame(jumpToTop)
+  window.setTimeout(jumpToTop, 120)
+}
+
 /**
  * Resets window scroll to the top on every route change.
  * Hash links (e.g. /#assistants) scroll to that section instead.

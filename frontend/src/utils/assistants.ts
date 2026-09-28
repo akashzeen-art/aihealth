@@ -290,8 +290,15 @@ export function normalizeAssistantType(value: string): string | null {
   return code || null
 }
 
+/** Short form of a conversation id for URLs; older `conv_<uuid>` ids use their first 8 characters. */
+export function conversationUrlId(id: string): string {
+  return id.startsWith('conv_') ? id.slice(5, 13) : id
+}
+
 export function assistantPath(slug: AssistantSlug, conversationId?: string): string {
-  return conversationId ? `/assistant/${slug}/${conversationId}` : `/assistant/${slug}`
+  return conversationId
+    ? `/assistant/${slug}/${conversationUrlId(conversationId)}`
+    : `/assistant/${slug}`
 }
 
 export const LANGUAGE_OPTIONS = [

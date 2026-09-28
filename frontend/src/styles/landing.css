@@ -1176,6 +1176,15 @@ body:has(.lp-landing) {
   transition: opacity 0.4s ease-out, transform 0.5s var(--feat-ease);
 }
 
+.lp-feat-art,
+.lp-feat-shadow {
+  pointer-events: none;
+}
+
+.lp-feat-option.is-active .lp-feat-top {
+  z-index: 2;
+}
+
 .lp-feat-option:not(.is-active) .lp-feat-top {
   opacity: 0;
   transform: translateY(-10px);
@@ -1200,8 +1209,22 @@ body:has(.lp-landing) {
   border-radius: var(--lp-radius-pill);
   background: rgba(255, 255, 255, 0.95);
   color: var(--feat-color);
+  font: inherit;
   font-weight: 700;
   font-size: 0.9rem;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lp-feat-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.lp-feat-cta:focus-visible {
+  outline: 3px solid var(--lp-lime);
+  outline-offset: 2px;
 }
 
 @media (max-width: 760px) {

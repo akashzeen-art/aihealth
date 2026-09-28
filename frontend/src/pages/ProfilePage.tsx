@@ -103,7 +103,8 @@ export default function ProfilePage() {
   }
 
   const initials = profileInitials(name || 'CareGuide')
-  const firstName = name.trim().split(/\s+/)[0] || 'there'
+  const rawFirst = name.trim().split(/\s+/)[0]
+  const firstName = rawFirst && rawFirst !== 'Friend' ? rawFirst : 'there'
   const safetyOk = hasOnboardingAck()
 
   return (
