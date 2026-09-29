@@ -1,5 +1,6 @@
 import { requireCurrentUser, safeSetItem } from './db'
 import { newId } from './ids'
+import { VACCINATION_STAGES } from './vaccinationSchedule'
 
 const TOOLS_PREFIX = 'careguide_tools_v1_'
 const MAX_READINGS = 400
@@ -202,19 +203,11 @@ export function dueReminders(now = new Date()): Reminder[] {
   })
 }
 
-/** Generic child check-up / vaccination visit ages — national schedules differ. */
-export const CHILD_VISIT_MILESTONES: { label: string; days: number }[] = [
-  { label: '6 weeks', days: 42 },
-  { label: '10 weeks', days: 70 },
-  { label: '14 weeks', days: 98 },
-  { label: '6 months', days: 182 },
-  { label: '9 months', days: 274 },
-  { label: '12 months', days: 365 },
-  { label: '15 months', days: 456 },
-  { label: '18 months', days: 548 },
-  { label: '4 years', days: 1461 },
-  { label: '5 years', days: 1826 },
-]
+const CHILD_VISIT_MILESTONES = VACCINATION_STAGES.filter((s) => s.days > 0).map((s) => ({
+  label: s.age,
+  days: s.days,
+  vaccines: [...s.national, ...s.additional],
+}))
 
 function toYmd(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0')
@@ -233,7 +226,7 @@ export function buildChildVisitReminders(childName: string, birthDate: string, t
     .map(({ milestone, date }) => ({
       kind: 'vaccination' as const,
       title: `${childName.trim() || 'Child'} — ${milestone.label} vaccination visit`,
-      notes: 'Check your clinic vaccination card for the exact vaccines due.',
+      notes: `Usually: ${milestone.vaccines.slice(0, 4).join(', ')}${milestone.vaccines.length > 4 ? '…' : ''}. Confirm with your clinic vaccination card.`.slice(0, 200),
       time,
       date: toYmd(date),
       repeat: 'once' as const,

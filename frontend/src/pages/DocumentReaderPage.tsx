@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import DocumentsPage from './DocumentsPage'
 import { EducationalDisclaimer } from '../components/ai/SafetyPrimitives'
@@ -28,18 +29,20 @@ export default function DocumentReaderPage() {
 
       <ol className="cg-docs-flow" aria-label="How Document Reader works">
         {FLOW.map((item, i) => (
-          <li key={item.step} className="cg-docs-flow-item">
-            <span className="cg-docs-flow-step">{item.step}</span>
-            <span className="cg-docs-flow-copy">
-              <strong>{item.label}</strong>
-              <span>{item.hint}</span>
-            </span>
-            {i < FLOW.length - 1 ? (
-              <span className="cg-docs-flow-arrow" aria-hidden="true">
-                →
+          <Fragment key={item.step}>
+            <li className="cg-docs-flow-item">
+              <span className="cg-docs-flow-step">{item.step}</span>
+              <span className="cg-docs-flow-copy">
+                <strong>{item.label}</strong>
+                <span>{item.hint}</span>
               </span>
+            </li>
+            {i < FLOW.length - 1 ? (
+              <li className="cg-docs-flow-arrow" aria-hidden="true">
+                →
+              </li>
             ) : null}
-          </li>
+          </Fragment>
         ))}
       </ol>
 

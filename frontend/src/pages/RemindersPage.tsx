@@ -15,6 +15,7 @@ import {
   type ReminderRepeat,
 } from '../local/healthTools'
 import { useToolsData } from '../hooks/useToolsData'
+import VaccinationChart from '../components/tools/VaccinationChart'
 import { assistantPath } from '../utils/assistants'
 import { getErrorMessage } from '../utils/errors'
 
@@ -72,8 +73,9 @@ export default function RemindersPage() {
   )
 
   useEffect(() => {
-    if (hash === '#vaccination') {
-      document.getElementById('child-schedule')?.scrollIntoView({ behavior: 'smooth' })
+    const target = hash === '#vaccination' ? 'child-schedule' : hash === '#vaccination-chart' ? 'vaccination-chart' : null
+    if (target) {
+      window.setTimeout(() => document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' }), 150)
     }
   }, [hash])
 
@@ -125,8 +127,6 @@ export default function RemindersPage() {
     }
     addReminders(items)
     setChildStatus(`Added ${items.length} upcoming vaccination visit reminders.`)
-    setChildName('')
-    setChildDob('')
   }
 
   async function enableNotifications() {
@@ -230,8 +230,8 @@ export default function RemindersPage() {
         <section id="child-schedule" className="cg-tools-card" aria-labelledby="child-visits">
           <h2 id="child-visits">Child vaccination visits</h2>
           <p className="cg-tools-muted">
-            Add reminders for common check-up and vaccination visit ages (6, 10 and 14 weeks, 6, 9,
-            12, 15 and 18 months, 4 and 5 years). Schedules vary by country — always follow your
+            Enter your child&apos;s date of birth to see the dates on the vaccination chart below and
+            add reminders for each upcoming visit. Schedules vary by country — always follow your
             clinic&apos;s vaccination card.
           </p>
           <form className="cg-tools-form" onSubmit={handleChildSchedule}>
@@ -265,6 +265,16 @@ export default function RemindersPage() {
           </Link>
         </section>
       </div>
+
+      <section id="vaccination-chart" className="cg-tools-card" aria-labelledby="vaccination-chart-title">
+        <h2 id="vaccination-chart-title">Child vaccination chart — birth to 5 years</h2>
+        <p className="cg-tools-muted">
+          {childDob
+            ? `Showing approximate dates for ${childName.trim() || 'your child'}. Tap an age to jump to it.`
+            : 'Follow the flow from birth to 5 years. Add a date of birth above to see dates and what is due now.'}
+        </p>
+        <VaccinationChart birthDate={childDob} childName={childName} />
+      </section>
 
       <section className="cg-tools-card cg-tools-list-card" aria-labelledby="your-reminders">
         <h2 id="your-reminders">Your reminders</h2>

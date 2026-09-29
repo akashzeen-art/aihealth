@@ -1,27 +1,24 @@
 import type { ReactNode } from 'react'
-import { BRAND } from '../../brand'
-import AiPresence from './AiPresence'
 import { SafetyBadge } from './SafetyPrimitives'
-import { languageLabel } from '../../utils/assistantExperience'
 
 export default function ContextualHeader({
   assistantName,
   purpose,
   icon,
-  language,
   conversationState,
-  country,
+  actions,
 }: {
   assistantName: string
   purpose: string
   icon: ReactNode
-  language: string
+  language?: string
   conversationState: 'ready' | 'active' | 'processing'
   country?: string | null
+  actions?: ReactNode
 }) {
   const stateLabel =
     conversationState === 'processing'
-      ? 'Preparing a reply'
+      ? 'Thinking…'
       : conversationState === 'active'
         ? 'In conversation'
         : 'Ready'
@@ -29,29 +26,22 @@ export default function ContextualHeader({
   return (
     <header className="cg-context-header animate-fade-up">
       <div className="cg-context-header-main">
-        <div className="cg-context-brand-row">
-          <AiPresence
-            state={conversationState === 'processing' ? 'processing' : conversationState === 'active' ? 'listening' : 'idle'}
-            size="sm"
-          />
-          <div>
-            <p className="cg-context-kicker">{BRAND.name}</p>
-            <div className="cg-context-title-row">
-              <span className="cg-context-icon" aria-hidden="true">
-                {icon}
-              </span>
-              <h1 className="cg-context-title">{assistantName}</h1>
-            </div>
-            <p className="cg-context-purpose">“{purpose}”</p>
+        <div className="cg-context-title-row">
+          <span className="cg-context-icon" aria-hidden="true">
+            {icon}
+          </span>
+          <div className="cg-context-text">
+            <h1 className="cg-context-title">{assistantName}</h1>
+            <p className="cg-context-purpose">{purpose}</p>
           </div>
         </div>
         <div className="cg-context-meta" aria-label="Conversation context">
-          <span className="cg-chip is-meta">{languageLabel(language)}</span>
+          <span className={`cg-context-status is-${conversationState}`}>
+            <i aria-hidden="true" />
+            {stateLabel}
+          </span>
           <SafetyBadge />
-          <span className="cg-chip is-meta">{stateLabel}</span>
-          {country?.trim() ? (
-            <span className="cg-chip is-meta">Country context: {country.trim()}</span>
-          ) : null}
+          {actions}
         </div>
       </div>
     </header>

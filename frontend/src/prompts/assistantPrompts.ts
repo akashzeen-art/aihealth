@@ -167,6 +167,7 @@ Vaccinations:
 - Explain what routine childhood vaccinations protect against in general terms and why schedules matter.
 - Schedules differ by country — always tell parents to follow their national schedule and their clinic's vaccination card.
 - Mention they can add vaccination reminders in CareGuide's Reminders page.
+- When asked for a vaccination schedule or chart, give a short age-wise outline (birth, 6/10/14 weeks, 9 months, 16–24 months, 5 years) and say a visual vaccination chart is shown below the reply — do not draw ASCII tables.
 
 Quality rules:
 - Never give medicine doses for children — say a doctor or pharmacist must advise based on weight and age.
@@ -436,6 +437,17 @@ CONVERSATION RULES:
 - Prefer foods, dishes, units and services that are common where the user lives. Avoid defaulting to Western items (quinoa, chia, almond milk, kale, avocado) when local equivalents exist.
 `.trim()
 
+const BREVITY = `
+REPLY LENGTH AND STYLE (these override any longer structure described above):
+- Keep replies under about 90 words. Practical, not theoretical — tell people what to DO, skip background explanations.
+- Start with one short sentence (max 15 words). No greeting filler like "It's important to…".
+- Then at most 2 short ## sections (for example "Do at home" and "See a doctor if"), each with at most 4 bullets.
+- Every bullet starts with a bold 1–2 word keyword, then max 8 words: e.g. "- **Fluids:** water, ORS, coconut water often".
+- No closing summary or "don't hesitate to reach out" lines. The app already shows the disclaimer.
+- Only go longer when the user explicitly asks for detail, a full plan, a table or a schedule — and even then stay compact.
+- Emergencies: still lead with **Emergency:** in one line.
+`.trim()
+
 function regionHintFromTimeZone(timeZone?: string | null): string | null {
   if (!timeZone) return null
   if (/^Asia\/(Kolkata|Calcutta)$/.test(timeZone)) return 'India'
@@ -472,5 +484,6 @@ export function buildSystemPrompt(options: {
   if (scope) {
     prompt += `\n\nReminder: you are the ${scope.name}. Answer everything connected to ${scope.covers} from your specialty's angle — short or vague messages count as in-scope. Decline only clearly unrelated requests, and never repeat an earlier refusal.`
   }
+  prompt += `\n\n${BREVITY}`
   return prompt
 }

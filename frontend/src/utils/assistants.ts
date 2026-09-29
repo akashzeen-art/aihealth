@@ -85,7 +85,7 @@ export const ASSISTANT_CATALOG: AssistantCatalogItem[] = [
     target: 'Parents',
     iconKey: 'child',
     accent: 'sky',
-    tool: { label: 'Vaccination reminders', to: '/reminders#vaccination' },
+    tool: { label: 'Vaccination chart', to: '/reminders#vaccination' },
     safetyInfo:
       'General education only. A sick or unusually drowsy child should be seen by a clinician promptly.',
   },

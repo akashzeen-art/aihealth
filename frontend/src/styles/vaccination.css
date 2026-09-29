@@ -1,0 +1,385 @@
+.vx-chart {
+  --vx-blue: #1e6fd9;
+  --vx-violet: #7c5cd6;
+  --vx-green: #16a36a;
+  --vx-amber: #e08a1e;
+  --vx-ink: #0f2537;
+  --vx-muted: #5b6b7a;
+  --vx-line: #d6e2ee;
+  display: grid;
+  gap: 1.1rem;
+  min-width: 0;
+}
+
+/* ---- Age stepper ---- */
+
+.vx-steps {
+  position: relative;
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.25rem 0.1rem 0.4rem;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.vx-steps li {
+  position: relative;
+  flex: 1 0 4.4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.vx-steps li + li::before {
+  content: '';
+  position: absolute;
+  top: 1.05rem;
+  right: 50%;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--vx-line);
+  z-index: 0;
+}
+
+.vx-steps li.is-past + li::before,
+.vx-steps li.is-past + li.is-due::before {
+  background: var(--vx-green);
+}
+
+.vx-steps button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  color: var(--vx-ink);
+}
+
+.vx-step-dot {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--vx-blue);
+  color: var(--vx-blue);
+  font-size: 0.8rem;
+  font-weight: 800;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vx-steps button:hover .vx-step-dot,
+.vx-steps button:focus-visible .vx-step-dot {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(30, 111, 217, 0.25);
+}
+
+.vx-step-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vx-steps li.is-past .vx-step-dot {
+  background: var(--vx-green);
+  border-color: var(--vx-green);
+  color: #fff;
+}
+
+.vx-steps li.is-due .vx-step-dot {
+  background: var(--vx-amber);
+  border-color: var(--vx-amber);
+  color: #fff;
+  animation: vx-pulse 1.8s ease-in-out infinite;
+}
+
+.vx-steps li.is-upcoming .vx-step-dot {
+  border-color: #9fb3c8;
+  color: var(--vx-muted);
+}
+
+@keyframes vx-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(224, 138, 30, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(224, 138, 30, 0); }
+}
+
+/* ---- Flow chart ---- */
+
+.vx-flow {
+  display: grid;
+  gap: 1.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vx-node {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  border: 1px solid var(--vx-line);
+  border-left: 5px solid var(--vx-blue);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(15, 37, 55, 0.05);
+  scroll-margin: 6rem;
+}
+
+.vx-node + .vx-node::before {
+  content: '';
+  position: absolute;
+  top: -1.6rem;
+  left: 4.6rem;
+  width: 2px;
+  height: 1.6rem;
+  background: var(--vx-line);
+}
+
+.vx-node + .vx-node::after {
+  content: '';
+  position: absolute;
+  top: -0.55rem;
+  left: calc(4.6rem - 5px);
+  border: 6px solid transparent;
+  border-top-color: #9fb3c8;
+  border-bottom: 0;
+}
+
+.vx-node-age {
+  display: grid;
+  align-content: center;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border-right: 1px dashed var(--vx-line);
+  background: linear-gradient(160deg, #f3f8ff, #fff);
+  border-radius: 11px 0 0 11px;
+}
+
+.vx-node-age strong {
+  font-size: 1.02rem;
+  color: var(--vx-ink);
+}
+
+.vx-node-age span {
+  font-size: 0.78rem;
+  color: var(--vx-muted);
+}
+
+.vx-status {
+  justify-self: start;
+  margin-top: 0.15rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.vx-status.is-past { background: #dcfce7; color: #166534; }
+.vx-status.is-due { background: #ffedd5; color: #9a4b00; }
+.vx-status.is-upcoming { background: #e8f0fb; color: #1d4f91; }
+
+.vx-node.is-past { border-left-color: var(--vx-green); }
+.vx-node.is-due {
+  border-left-color: var(--vx-amber);
+  box-shadow: 0 0 0 3px rgba(224, 138, 30, 0.18), 0 10px 24px rgba(15, 37, 55, 0.08);
+}
+.vx-node.is-upcoming { border-left-color: #9fb3c8; }
+
+.vx-node-body {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+}
+
+.vx-group {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.vx-group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vx-muted);
+}
+
+.vx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vx-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.vx-chip.is-national {
+  background: #e6f0fd;
+  color: #174f9c;
+  border: 1px solid #c4dafa;
+}
+
+.vx-chip.is-extra {
+  background: #f1ecfd;
+  color: #5b3fb3;
+  border: 1px dashed #cdbff5;
+}
+
+.vx-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--vx-muted);
+}
+
+.vx-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  font-size: 0.8rem;
+  color: var(--vx-muted);
+}
+
+.vx-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.vx-legend i.vx-chip {
+  width: 1.1rem;
+  height: 0.8rem;
+  padding: 0;
+}
+
+.vx-disclaimer {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--vx-muted);
+}
+
+/* ---- Compact (inside chat) ---- */
+
+.vx-chart.is-compact {
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--vx-line);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #f5f9ff, #fff);
+}
+
+.vx-compact-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem 0.8rem;
+}
+
+.vx-compact-head strong {
+  font-size: 0.92rem;
+  color: var(--vx-ink);
+}
+
+.vx-compact-head span {
+  font-size: 0.75rem;
+  color: var(--vx-muted);
+}
+
+.vx-chart.is-compact .vx-steps li {
+  flex-basis: 3.4rem;
+}
+
+.vx-chart.is-compact .vx-step-dot {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-width: 2px;
+  font-size: 0.72rem;
+}
+
+.vx-chart.is-compact .vx-steps li + li::before {
+  top: 0.85rem;
+}
+
+.vx-chart.is-compact .vx-step-label {
+  font-size: 0.68rem;
+}
+
+.vx-steps li.is-selected .vx-step-dot {
+  background: var(--vx-blue);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(30, 111, 217, 0.18);
+}
+
+.vx-chart.is-compact .vx-node {
+  grid-template-columns: 7rem minmax(0, 1fr);
+  box-shadow: none;
+}
+
+.vx-compact-link {
+  justify-self: start;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--vx-blue);
+  text-decoration: none;
+}
+
+.vx-compact-link:hover {
+  text-decoration: underline;
+}
+
+.vx-chart.is-compact .vx-node-age,
+.vx-chart.is-compact .vx-node-body {
+  padding: 0.6rem 0.75rem;
+}
+
+.vx-chart.is-compact .vx-chip {
+  font-size: 0.74rem;
+  padding: 0.2rem 0.5rem;
+}
+
+@media (max-width: 560px) {
+  .vx-node,
+  .vx-chart.is-compact .vx-node {
+    grid-template-columns: 1fr;
+  }
+
+  .vx-node-age {
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    gap: 0.6rem;
+    border-right: 0;
+    border-bottom: 1px dashed var(--vx-line);
+    border-radius: 11px 11px 0 0;
+  }
+
+  .vx-status {
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-steps li.is-due .vx-step-dot {
+    animation: none;
+  }
+}

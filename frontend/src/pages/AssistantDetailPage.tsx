@@ -11,6 +11,7 @@ import {
   uploadDocument,
   updateProfile,
 } from '../services/api'
+import ChatMoreMenu from '../components/chat/ChatMoreMenu'
 import { resolveConversationId } from '../services/conversationService'
 import { assistantIcons } from '../components/assistants/assistantIcons'
 import ConversationSidebar from '../components/chat/ConversationSidebar'
@@ -451,6 +452,33 @@ export default function AssistantDetailPage() {
               language={language}
               conversationState={conversationState}
               country={user?.country}
+              actions={
+                <>
+                  {catalog.tool ? (
+                    <Link to={catalog.tool.to} className="cg-context-tool">
+                      {catalog.tool.label}
+                    </Link>
+                  ) : null}
+                  {conversationId ? (
+                    <ChatMoreMenu
+                      items={[
+                        { label: isPinned ? 'Unpin chat' : 'Pin chat', onSelect: () => togglePinned(conversationId) },
+                        {
+                          label: 'Copy brief',
+                          onSelect: () => void handleExportBrief('copy'),
+                          disabled: messages.length === 0,
+                        },
+                        {
+                          label: 'Download brief',
+                          onSelect: () => void handleExportBrief('download'),
+                          disabled: messages.length === 0,
+                        },
+                        { label: 'Clear chat', onSelect: () => void handleClearConversation(), danger: true },
+                      ]}
+                    />
+                  ) : null}
+                </>
+              }
             />
           }
           languageControl={
@@ -464,69 +492,10 @@ export default function AssistantDetailPage() {
             />
           }
           toolbar={
-            catalog.tool || catalog.supportsDocuments || conversationId || messages.length > 0 || briefStatus ? (
-            <header className="assistant-detail-toolbar">
-              <div className="toolbar-actions">
-                {catalog.tool ? (
-                  <Link to={catalog.tool.to} className="cg-btn cg-btn-secondary cg-btn-sm">
-                    {catalog.tool.label}
-                  </Link>
-                ) : null}
-                {catalog.supportsDocuments && (
-                  <FileUploader
-                    uploading={uploading}
-                    onFile={(file) => void handleAttach(file)}
-                  />
-                )}
-                {conversationId ? (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="cg-btn cg-btn-ghost cg-btn-sm"
-                      onClick={() => togglePinned(conversationId)}
-                      aria-pressed={isPinned}
-                    >
-                      {isPinned ? 'Unpin' : 'Pin'}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="cg-btn cg-btn-ghost cg-btn-sm"
-                      onClick={() => void handleExportBrief('copy')}
-                      disabled={messages.length === 0}
-                    >
-                      Copy brief
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="cg-btn cg-btn-secondary cg-btn-sm"
-                      onClick={() => void handleExportBrief('download')}
-                      disabled={messages.length === 0}
-                    >
-                      Export brief
-                    </Button>
-                  </>
-                ) : null}
-                {conversationId || messages.length > 0 ? (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="cg-btn cg-btn-ghost cg-btn-sm"
-                    onClick={() => void handleClearConversation()}
-                    aria-label="Clear conversation"
-                  >
-                    Clear
-                  </Button>
-                ) : null}
-              </div>
-              {briefStatus ? (
-                <p className="cg-brief-status" role="status">
-                  {briefStatus}
-                </p>
-              ) : null}
-            </header>
+            briefStatus ? (
+              <p className="cg-brief-status" role="status">
+                {briefStatus}
+              </p>
             ) : null
           }
           attachControl={

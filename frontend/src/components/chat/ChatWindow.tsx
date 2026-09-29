@@ -159,6 +159,7 @@ export default function ChatWindow({
               conversationId={conversationId}
               assistantType={assistantType}
               assistantSlug={assistantSlug}
+              question={messages[i - 1]?.role === 'USER' ? messages[i - 1].content : ''}
             />
           ))
         )}
@@ -176,7 +177,9 @@ export default function ChatWindow({
       </div>
 
       <div className="cg-composer-shell">
-        <ContextChips chips={chips} disabled={sending || loading} onPick={applySuggestion} />
+        {messages.length === 0 ? (
+          <ContextChips chips={chips} disabled={sending || loading} onPick={applySuggestion} />
+        ) : null}
         <form
           className={`cg-composer ${attachControl ? 'has-attach' : 'no-attach'}`.trim()}
           onSubmit={(e) => {
