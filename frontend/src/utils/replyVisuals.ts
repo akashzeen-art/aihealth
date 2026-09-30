@@ -2,6 +2,17 @@ type VisualRule = { icon: string; tone: string; test: RegExp }
 
 const RULES: VisualRule[] = [
   { icon: '🚑', tone: 'red', test: /emergenc|ambulance|\b(108|112|911|999)\b|call (for )?help|आपात|एम्बुलेंस/i },
+  { icon: '🍯', tone: 'amber', test: /honey|shahad|शहद/i },
+  { icon: '🫚', tone: 'amber', test: /ginger|adrak|अदरक|सोंठ/i },
+  { icon: '🌿', tone: 'green', test: /tulsi|basil|mint|pudina|neem|herb|kadha|काढ़ा|तुलसी|पुदीना/i },
+  { icon: '🥛', tone: 'amber', test: /haldi|turmeric|हल्दी|milk|doodh|दूध/i },
+  { icon: '♨️', tone: 'orange', test: /steam|bhaap|भाप|warm compress|hot compress|सिकाई/i },
+  { icon: '🧂', tone: 'blue', test: /gargle|salt water|namak|नमक|गरारे/i },
+  { icon: '🍋', tone: 'amber', test: /lemon|nimbu|नींबू/i },
+  { icon: '🌱', tone: 'green', test: /ajwain|jeera|cumin|saunf|fennel|methi|isabgol|psyllium|अजवाइन|जीरा|सौंफ|ईसबगोल/i },
+  { icon: '🥥', tone: 'teal', test: /coconut|nariyal|नारियल/i },
+  { icon: '🥣', tone: 'teal', test: /curd|yogurt|dahi|buttermilk|chaach|दही|छाछ/i },
+  { icon: '🍌', tone: 'amber', test: /banana|kela|केला/i },
   { icon: '🫁', tone: 'red', test: /breath|wheez|सांस|श्वास/i },
   { icon: '🌡️', tone: 'orange', test: /fever|temperature|thermometer|°[cf]|बुखार|तापमान|ताप/i },
   { icon: '💧', tone: 'blue', test: /water|fluid|hydrat|drink|\bors\b|dehydrat|coconut|soup|पानी|तरल|पेय/i },
@@ -26,6 +37,7 @@ const RULES: VisualRule[] = [
 
 const HEADING_RULES: VisualRule[] = [
   { icon: '🚑', tone: 'red', test: /emergenc|urgent|आपात/i },
+  { icon: '🌿', tone: 'green', test: /remed|nuskh|घरेलू|नुस्ख|remède|tiba|علاج/i },
   { icon: '🩺', tone: 'teal', test: /doctor|clinician|see a|when to|डॉक्टर|कब/i },
   { icon: '🏠', tone: 'green', test: /home|at home|घर/i },
   { icon: '🚫', tone: 'red', test: /avoid|don'?t|never|बचें|न करें/i },

@@ -1,4 +1,5 @@
-import { buildSystemPrompt } from '../prompts/assistantPrompts'
+import { assistantScopeName, buildSystemPrompt } from '../prompts/assistantPrompts'
+import { localReply } from '../utils/topicGuard'
 import { ApiError } from './apiClient'
 import { detectDiet, dietConstraint, dietCorrection } from '../utils/dietGuard'
 
@@ -43,6 +44,12 @@ export async function completeChat(options: {
   history: ChatTurn[]
   signal?: AbortSignal
 }): Promise<string> {
+  const lastUser = [...options.history].reverse().find((turn) => turn.role === 'user')
+  const canned = lastUser
+    ? localReply(lastUser.content, options.language, assistantScopeName(options.assistantCode))
+    : null
+  if (canned) return canned
+
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY?.trim()
   if (!apiKey) {
     throw new ApiError(
@@ -92,6 +99,7 @@ async function requestCompletion(
   const body = {
     model,
     temperature: 0.3,
+    max_tokens: 600,
     messages,
   }
   const options = { signal }
