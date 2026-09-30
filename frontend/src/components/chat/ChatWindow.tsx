@@ -1,5 +1,6 @@
-import { useEffect, useRef, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, type FormEvent, type ReactNode } from 'react'
 import type { Message } from '../../types'
+import { replyImageIds } from '../../utils/replyImages'
 import ErrorMessage from '../common/ErrorMessage'
 import Button from '../ui/Button'
 import MessageBubble from './MessageBubble'
@@ -64,8 +65,9 @@ export default function ChatWindow({
   assistantType,
   assistantSlug,
 }: ChatWindowProps) {
+  const imageIds = useMemo(() => replyImageIds(messages), [messages])
   const listRef = useRef<HTMLDivElement>(null)
-  const endRef = useRef<HTMLDivElement>(null)
+  const spacerRef = useRef<HTMLDivElement>(null)
   const areaRef = useRef<HTMLTextAreaElement>(null)
   const seenRef = useRef<{ conversationId?: string; count: number; loaded: boolean }>({
     conversationId,
@@ -81,15 +83,31 @@ export default function ChatWindow({
 
     seenRef.current = { conversationId, count: messages.length, loaded: !loading }
 
-    // Opening a page or chat keeps the window at the top; only new activity follows the thread.
-    if (loading || switched || justLoaded) return
-    if (!grew && !sending) return
-
     const list = listRef.current
-    if (list && list.scrollHeight > list.clientHeight) {
-      list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' })
+    const spacer = spacerRef.current
+    if (!list || !spacer) return
+    const anchors = list.querySelectorAll<HTMLElement>('.cg-msg-user')
+    const anchor = anchors[anchors.length - 1]
+    const ownScroll = getComputedStyle(list).overflowY !== 'visible'
+
+    // The latest question stays pinned to the top while its reply fills in below it.
+    spacer.style.height = '0px'
+    if (anchor && ownScroll && messages.length > 1) {
+      const below = spacer.getBoundingClientRect().top - anchor.getBoundingClientRect().top
+      spacer.style.height = `${Math.max(0, list.clientHeight - below - 24)}px`
     }
-    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+
+    if (loading || switched || justLoaded || !anchor) return
+    const lastIsUser = messages[messages.length - 1]?.role === 'USER'
+    if (!grew || !lastIsUser) return
+
+    if (ownScroll) {
+      const top =
+        list.scrollTop + anchor.getBoundingClientRect().top - list.getBoundingClientRect().top - 12
+      list.scrollTo({ top, behavior: 'smooth' })
+    } else {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }, [messages, sending, loading, conversationId])
 
   useEffect(() => {
@@ -160,6 +178,7 @@ export default function ChatWindow({
               assistantType={assistantType}
               assistantSlug={assistantSlug}
               question={messages[i - 1]?.role === 'USER' ? messages[i - 1].content : ''}
+              showImage={imageIds.has(m.id)}
             />
           ))
         )}
@@ -173,7 +192,7 @@ export default function ChatWindow({
             onPick={applySuggestion}
           />
         )}
-        <div ref={endRef} />
+        <div ref={spacerRef} className="cg-chat-spacer" aria-hidden="true" />
       </div>
 
       <div className="cg-composer-shell">

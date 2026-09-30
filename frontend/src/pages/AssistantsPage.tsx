@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { listAssistants } from '../services/api'
 import { getErrorMessage } from '../utils/errors'
@@ -25,6 +26,14 @@ const CATEGORIES = [
 ] as const
 
 type CategoryId = (typeof CATEGORIES)[number]['id']
+
+const SECTIONS: { id: Exclude<CategoryId, 'all'>; emoji: string; title: string; blurb: string }[] = [
+  { id: 'everyday', emoji: '🩺', title: 'Everyday care', blurb: 'Quick answers for common health worries' },
+  { id: 'family', emoji: '👨‍👩‍👧', title: 'Family & mind', blurb: 'Pregnancy, babies, kids and emotional wellbeing' },
+  { id: 'lifestyle', emoji: '🥗', title: 'Lifestyle', blurb: 'Food, movement and daily habits' },
+  { id: 'conditions', emoji: '💊', title: 'Conditions & meds', blurb: 'Living with long-term conditions' },
+  { id: 'tools', emoji: '🧰', title: 'Tools', blurb: 'Reports, reminders and schedules' },
+]
 
 const CATEGORY_OF: Record<string, CategoryId> = {
   health: 'everyday',
@@ -75,7 +84,7 @@ export default function AssistantsPage() {
   const [assistants, setAssistants] = useState<Assistant[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [selectedSlug, setSelectedSlug] = useState<string>(ASSISTANT_CATALOG[0]?.slug ?? 'health')
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [category, setCategory] = useState<CategoryId>('all')
   const [query, setQuery] = useState('')
   const favoriteAssistants = useEngagementStore((s) => s.favoriteAssistants)
@@ -113,15 +122,25 @@ export default function AssistantsPage() {
       .toLowerCase()
       .includes(needle)
   })
-  const selected =
-    visibleItems.find((c) => c.slug === selectedSlug) ??
-    visibleItems[0] ??
-    catalogItems.find((c) => c.slug === selectedSlug) ??
-    catalogItems[0]
-  const experience = getExperience(selected.slug)
-  const selectedIcon =
-    assistantIcons[selected.iconKey] ?? assistantIcons['heart-pulse']
-  const isFavorite = favoriteAssistants.includes(selected.id)
+  const selected = catalogItems.find((c) => c.slug === selectedSlug) ?? null
+  const sections = SECTIONS.map((section) => ({
+    ...section,
+    items: visibleItems.filter((item) => CATEGORY_OF[item.slug] === section.id),
+  })).filter((section) => section.items.length > 0)
+
+  useEffect(() => {
+    if (!selectedSlug) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedSlug(null)
+    }
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [selectedSlug])
 
   function startConversation(item: AssistantCatalogItem, starter?: string) {
     const path = assistantPath(item.slug)
@@ -206,7 +225,7 @@ export default function AssistantsPage() {
             ))}
           </div>
 
-          <div className="cg-asst-layout">
+          <div className="cg-asst-sections">
             {visibleItems.length === 0 ? (
               <div className="cg-asst-empty">
                 <strong>No assistant matches “{query}”.</strong>
@@ -223,141 +242,176 @@ export default function AssistantsPage() {
                 </button>
               </div>
             ) : (
-              <div className="cg-asst-grid" role="list" aria-label="CareGuide assistants">
-                {visibleItems.map((item, index) => {
-                  const live = assistants.find((a) => a.id === item.id)
-                  const icon = assistantIcons[item.iconKey] ?? assistantIcons['heart-pulse']
-                  const isSelected = selected.slug === item.slug
-                  const purpose = getExperience(item.slug).purpose
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      role="listitem"
-                      className={[
-                        'cg-asst-card',
-                        `accent-${item.accent}`,
-                        isSelected ? 'is-selected' : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                      style={{ animationDelay: `${index * 35}ms` }}
-                      aria-pressed={isSelected}
-                      aria-controls={previewId}
-                      onClick={() => setSelectedSlug(item.slug)}
-                      onDoubleClick={() => startConversation(item)}
-                    >
-                      <span className="cg-asst-card-top">
-                        <span className="cg-asst-card-icon" aria-hidden="true">
-                          {icon}
-                        </span>
-                        <span className="cg-asst-card-for">{item.target}</span>
-                      </span>
-                      <strong className="cg-asst-card-name">{item.name}</strong>
-                      <span className="cg-asst-card-purpose">{purpose}</span>
-                      <span className="cg-asst-card-foot">
-                        {live?.supportsDocuments || item.supportsDocuments ? (
-                          <em className="cg-asst-card-tag">Uploads</em>
-                        ) : null}
-                        {item.tool ? <em className="cg-asst-card-tag">Tracker tool</em> : null}
-                        {favoriteAssistants.includes(item.id) ? (
-                          <em className="cg-asst-card-tag is-fav">★ Favorite</em>
-                        ) : null}
-                        <span className="cg-asst-card-arrow" aria-hidden="true">
-                          →
-                        </span>
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-
-            <aside
-              id={previewId}
-              key={selected.slug}
-              className={`cg-asst-preview accent-${selected.accent}`}
-              aria-live="polite"
-            >
-              <div className="cg-asst-preview-band">
-                <span className="cg-asst-preview-icon" aria-hidden="true">
-                  {selectedIcon}
-                </span>
-                <div className="cg-asst-preview-title">
-                  <p className="cg-asst-preview-label">For {selected.target.toLowerCase()}</p>
-                  <h2>{selected.name}</h2>
-                </div>
-                <button
-                  type="button"
-                  className={`cg-asst-fav${isFavorite ? ' is-active' : ''}`}
-                  onClick={() => toggleFavorite(selected.id)}
-                  aria-pressed={isFavorite}
-                  aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                  title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              sections.map((section) => (
+                <section
+                  key={section.id}
+                  className={`cg-asst-section is-${section.id}`}
+                  aria-labelledby={`asst-sec-${section.id}`}
                 >
-                  {isFavorite ? '★' : '☆'}
-                </button>
-              </div>
+                  <header className="cg-asst-section-head">
+                    <span className="cg-asst-section-emoji" aria-hidden="true">
+                      {section.emoji}
+                    </span>
+                    <div>
+                      <h2 id={`asst-sec-${section.id}`}>{section.title}</h2>
+                      <p>{section.blurb}</p>
+                    </div>
+                    <span className="cg-asst-section-count">{section.items.length}</span>
+                  </header>
 
-              <div className="cg-asst-preview-body">
-                <p className="cg-asst-preview-purpose">{experience.purpose}</p>
-                <p className="cg-asst-preview-desc">{selected.description}</p>
-
-                <div className="cg-asst-starters">
-                  <h3>Try asking</h3>
-                  <ul>
-                    {experience.starters.map((starter) => (
-                      <li key={starter}>
-                        <button
-                          type="button"
-                          className="cg-asst-starter"
-                          onClick={() => startConversation(selected, starter)}
-                        >
-                          <span className="cg-asst-starter-q" aria-hidden="true">
-                            ?
-                          </span>
-                          <span className="cg-asst-starter-text">{starter}</span>
-                          <span className="cg-asst-starter-go" aria-hidden="true">
-                            →
-                          </span>
-                        </button>
-                      </li>
-                    ))}
+                  <ul className="cg-asst-grid">
+                    {section.items.map((item, index) => {
+                      const live = assistants.find((a) => a.id === item.id)
+                      const icon = assistantIcons[item.iconKey] ?? assistantIcons['heart-pulse']
+                      const purpose = getExperience(item.slug).purpose
+                      const fav = favoriteAssistants.includes(item.id)
+                      return (
+                        <li key={item.id}>
+                          <button
+                            type="button"
+                            className={`cg-asst-card accent-${item.accent}`}
+                            style={{ animationDelay: `${index * 40}ms` }}
+                            aria-haspopup="dialog"
+                            aria-controls={previewId}
+                            onClick={() => setSelectedSlug(item.slug)}
+                          >
+                            <span className="cg-asst-card-icon" aria-hidden="true">
+                              {icon}
+                            </span>
+                            <span className="cg-asst-card-text">
+                              <strong className="cg-asst-card-name">
+                                {item.name}
+                                {fav ? (
+                                  <span className="cg-asst-card-star" aria-label="Favorite">
+                                    ★
+                                  </span>
+                                ) : null}
+                              </strong>
+                              <span className="cg-asst-card-purpose">{purpose}</span>
+                              <span className="cg-asst-card-foot">
+                                <em className="cg-asst-card-tag is-for">{item.target}</em>
+                                {live?.supportsDocuments || item.supportsDocuments ? (
+                                  <em className="cg-asst-card-tag">Uploads</em>
+                                ) : null}
+                                {item.tool ? <em className="cg-asst-card-tag">Tool</em> : null}
+                              </span>
+                            </span>
+                            <span className="cg-asst-card-arrow" aria-hidden="true">
+                              →
+                            </span>
+                          </button>
+                        </li>
+                      )
+                    })}
                   </ul>
-                </div>
-
-                <p className="cg-asst-safety">
-                  <span aria-hidden="true">🛡</span>
-                  {selected.safetyInfo}
-                </p>
-
-                <div className="cg-asst-actions">
-                  <button
-                    type="button"
-                    className="cg-asst-cta"
-                    onClick={() => startConversation(selected)}
-                  >
-                    Start conversation
-                    <span aria-hidden="true">→</span>
-                  </button>
-                  {selected.tool ? (
-                    <Link to={selected.tool.to} className="cg-btn cg-btn-secondary cg-btn-block">
-                      {selected.tool.label}
-                    </Link>
-                  ) : selected.supportsDocuments ? (
-                    <Link to="/document-reader" className="cg-btn cg-btn-secondary cg-btn-block">
-                      Open Document Reader
-                    </Link>
-                  ) : null}
-                </div>
-              </div>
-            </aside>
+                </section>
+              ))
+            )}
           </div>
         </>
       ) : null}
 
+      {selected ? createPortal(
+        <div className="cg-asst-page cg-asst-sheet-root">
+          <button
+            type="button"
+            className="cg-asst-sheet-backdrop"
+            aria-label="Close details"
+            onClick={() => setSelectedSlug(null)}
+          />
+          <aside
+            id={previewId}
+            key={selected.slug}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`${previewId}-title`}
+            className={`cg-asst-preview cg-asst-sheet accent-${selected.accent}`}
+          >
+            <div className="cg-asst-preview-band">
+              <span className="cg-asst-preview-icon" aria-hidden="true">
+                {assistantIcons[selected.iconKey] ?? assistantIcons['heart-pulse']}
+              </span>
+              <div className="cg-asst-preview-title">
+                <p className="cg-asst-preview-label">For {selected.target.toLowerCase()}</p>
+                <h2 id={`${previewId}-title`}>{selected.name}</h2>
+              </div>
+              <button
+                type="button"
+                className={`cg-asst-fav${favoriteAssistants.includes(selected.id) ? ' is-active' : ''}`}
+                onClick={() => toggleFavorite(selected.id)}
+                aria-pressed={favoriteAssistants.includes(selected.id)}
+                aria-label={
+                  favoriteAssistants.includes(selected.id) ? 'Remove from favorites' : 'Add to favorites'
+                }
+              >
+                {favoriteAssistants.includes(selected.id) ? '★' : '☆'}
+              </button>
+              <button
+                type="button"
+                className="cg-asst-sheet-close"
+                onClick={() => setSelectedSlug(null)}
+                aria-label="Close"
+                autoFocus
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="cg-asst-preview-body">
+              <p className="cg-asst-preview-purpose">{getExperience(selected.slug).purpose}</p>
+              <p className="cg-asst-preview-desc">{selected.description}</p>
+
+              <div className="cg-asst-starters">
+                <h3>Try asking</h3>
+                <ul>
+                  {getExperience(selected.slug).starters.map((starter) => (
+                    <li key={starter}>
+                      <button
+                        type="button"
+                        className="cg-asst-starter"
+                        onClick={() => startConversation(selected, starter)}
+                      >
+                        <span className="cg-asst-starter-q" aria-hidden="true">
+                          ?
+                        </span>
+                        <span className="cg-asst-starter-text">{starter}</span>
+                        <span className="cg-asst-starter-go" aria-hidden="true">
+                          →
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <p className="cg-asst-safety">
+                <span aria-hidden="true">🛡</span>
+                {selected.safetyInfo}
+              </p>
+            </div>
+
+            <div className="cg-asst-actions">
+              <button type="button" className="cg-asst-cta" onClick={() => startConversation(selected)}>
+                Start conversation
+                <span aria-hidden="true">→</span>
+              </button>
+              {selected.tool ? (
+                <Link to={selected.tool.to} className="cg-btn cg-btn-secondary cg-btn-block">
+                  {selected.tool.label}
+                </Link>
+              ) : selected.supportsDocuments ? (
+                <Link to="/document-reader" className="cg-btn cg-btn-secondary cg-btn-block">
+                  Open Document Reader
+                </Link>
+              ) : null}
+            </div>
+          </aside>
+        </div>,
+        document.body,
+      ) : null}
+
       <p className="cg-asst-footnote">
-        Tip: double-click any card to jump straight into a conversation. Prefer documents?{' '}
+        Tip: tap any assistant to see what it can help with. Prefer documents?{' '}
         <Link to="/document-reader" className="cg-asst-footnote-link">
           Open Document Reader
         </Link>

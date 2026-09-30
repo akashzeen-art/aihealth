@@ -2300,3 +2300,13 @@
     flex-shrink: 0;
   }
 }
+
+.cg-chat-page .cg-msg-user {
+  scroll-margin-top: 5.5rem;
+}
+
+.cg-chat-spacer {
+  flex-shrink: 0;
+  pointer-events: none;
+}
+

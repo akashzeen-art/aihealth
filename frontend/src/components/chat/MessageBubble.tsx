@@ -37,15 +37,12 @@ function collectText(node: ReactNode): string {
   return ''
 }
 
-const IMAGE_EXTENSIONS = ['webp', 'png', 'jpg', 'jpeg']
-
 function ReplyImageBanner({ image }: { image: ReplyImage }) {
-  const [attempt, setAttempt] = useState(0)
-  if (attempt >= IMAGE_EXTENSIONS.length) return null
-  const src = image.src.replace(/\.webp$/, `.${IMAGE_EXTENSIONS[attempt]}`)
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  if (failedSrc === image.src) return null
   return (
     <figure className="cg-reply-image">
-      <img src={src} alt={image.alt} loading="lazy" onError={() => setAttempt((n) => n + 1)} />
+      <img src={image.src} alt={image.alt} loading="lazy" onError={() => setFailedSrc(image.src)} />
     </figure>
   )
 }
@@ -122,6 +119,7 @@ export default function MessageBubble({
   assistantType,
   assistantSlug,
   question = '',
+  showImage = false,
 }: {
   message: Message
   isLatestAssistant?: boolean
@@ -129,6 +127,7 @@ export default function MessageBubble({
   assistantType?: string
   assistantSlug?: string
   question?: string
+  showImage?: boolean
 }) {
   const isUser = message.role === 'USER'
   const isSystem = message.role === 'SYSTEM'
@@ -159,7 +158,7 @@ export default function MessageBubble({
     )
   }
 
-  const image = replyImageFor(question, message.content)
+  const image = showImage ? replyImageFor(question, message.content) : null
   const { intro, rest } = image ? splitIntro(message.content) : { intro: '', rest: '' }
 
   function toggleBookmark() {
