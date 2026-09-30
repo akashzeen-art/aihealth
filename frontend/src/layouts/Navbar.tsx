@@ -32,6 +32,7 @@ export default function Navbar() {
   const location = useLocation()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const compact = /^\/(assistant|app\/chat)\//.test(location.pathname)
   const firstName = user?.name?.trim().split(/\s+/)[0]
   const initials = (user?.name || 'CG')
     .split(/\s+/)
@@ -71,6 +72,7 @@ export default function Navbar() {
         'cg-nav',
         'is-app',
         'is-authed',
+        compact ? 'is-compact' : '',
         scrolled ? 'is-scrolled' : '',
         open ? 'is-open' : '',
       ]

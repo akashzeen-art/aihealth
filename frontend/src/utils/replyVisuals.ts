@@ -2,6 +2,9 @@ type VisualRule = { icon: string; tone: string; test: RegExp }
 
 const RULES: VisualRule[] = [
   { icon: '🚑', tone: 'red', test: /emergenc|ambulance|\b(108|112|911|999)\b|call (for )?help|आपात|एम्बुलेंस/i },
+  { icon: '❓', tone: 'indigo', test: /question|\bask\b|पूछ|सवाल/i },
+  { icon: '📄', tone: 'blue', test: /document|record|report|referral|prescription|photo|insurance|रिपोर्ट/i },
+  { icon: '📝', tone: 'amber', test: /timeline|diary|journal|note down|लिख/i },
   { icon: '🍯', tone: 'amber', test: /honey|shahad|शहद/i },
   { icon: '🫚', tone: 'amber', test: /ginger|adrak|अदरक|सोंठ/i },
   { icon: '🌿', tone: 'green', test: /tulsi|basil|mint|pudina|neem|herb|kadha|काढ़ा|तुलसी|पुदीना/i },
@@ -27,7 +30,7 @@ const RULES: VisualRule[] = [
   { icon: '❤️', tone: 'red', test: /blood pressure|\bbp\b|heart|pulse|रक्तचाप|दिल/i },
   { icon: '🧠', tone: 'violet', test: /stress|anxi|mood|mental|calm|worr|तनाव|चिंता|मन/i },
   { icon: '🏃', tone: 'green', test: /exercis|walk|yoga|activ|workout|stretch|व्यायाम|टहल|योग/i },
-  { icon: '🥗', tone: 'green', test: /food|eat|meal|diet|fruit|vegetable|dal|roti|rice|khichdi|protein|खाना|भोजन|आहार|फल|सब्ज/i },
+  { icon: '🥗', tone: 'green', test: /food|\beat(s|ing)?\b|meal|diet|fruit|vegetable|dal|roti|rice|khichdi|protein|खाना|भोजन|आहार|फल|सब्ज/i },
   { icon: '🧼', tone: 'blue', test: /wash|hand|hygien|clean|soap|साफ|हाथ|स्वच्छ/i },
   { icon: '🧊', tone: 'blue', test: /cold compress|sponge|lukewarm|cool|ice|ठंडा|गीला कपड़ा/i },
   { icon: '⏱️', tone: 'amber', test: /\bdays?\b|\bhours?\b|lasts|more than|longer|दिन|घंट/i },
@@ -43,7 +46,7 @@ const HEADING_RULES: VisualRule[] = [
   { icon: '🚫', tone: 'red', test: /avoid|don'?t|never|बचें|न करें/i },
   { icon: '❓', tone: 'indigo', test: /question|ask|पूछ|सवाल/i },
   { icon: '🔍', tone: 'amber', test: /sign|symptom|cause|लक्षण|कारण/i },
-  { icon: '🥗', tone: 'green', test: /meal|food|diet|eat|भोजन|खाना/i },
+  { icon: '🥗', tone: 'green', test: /meal|food|diet|\beat(s|ing)?\b|भोजन|खाना/i },
 ]
 
 export type ReplyVisual = { icon: string; tone: string }

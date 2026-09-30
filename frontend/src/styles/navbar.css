@@ -468,6 +468,34 @@ body.cg-nav-lock {
   }
 }
 
+/* Slim bar while chatting */
+.cg-nav.is-compact .cg-nav-inner {
+  padding: 0.3rem 0;
+}
+
+.cg-nav.is-compact .cg-nav-logo {
+  height: 2rem;
+}
+
+.cg-nav.is-compact .cg-nav-link {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.86rem;
+}
+
+.cg-nav.is-compact .cg-nav-user {
+  padding: 0.15rem 0.55rem 0.15rem 0.15rem;
+}
+
+.cg-nav.is-compact .cg-nav-avatar {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.cg-nav.is-compact .cg-nav-cta {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.84rem;
+}
+
 /* Compat: old .navbar rules shouldn't fight the new bar */
 .cg-nav + .app-main,
 .app-shell .cg-nav ~ .app-main {

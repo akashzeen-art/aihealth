@@ -5,11 +5,11 @@
 const TOPICS: { file: string; alt: string; test: RegExp }[] = [
   { file: 'ambulance emergency illustration.jpg', alt: 'Calling emergency services', test: /emergenc|ambulance|\b(108|112|911)\b|आपात/i },
   { file: 'baby vaccination illustration.jpg', alt: 'Child getting a vaccine', test: /vaccin|immuni|टीका|टीके/i },
-  { file: 'child fever thermometer illustration.jpg', alt: 'Checking a child’s temperature', test: /fever|temperature|बुखार|तापमान/i },
-  { file: 'cold flu child illustration.jpg', alt: 'Cough and cold care', test: /cough|cold|sneez|runny nose|breath|wheez|flu\b|खांसी|जुकाम|सर्दी/i },
-  { file: 'stomach.jpg', alt: 'Tummy ache and ORS', test: /vomit|diarrh|loose motion|stomach|tummy|उल्टी|दस्त|पेट/i },
+  { file: 'child fever thermometer illustration.jpg', alt: 'Checking a child’s temperature', test: /fever|temperature|bukh?aa?r|बुखार|तापमान/i },
+  { file: 'cold flu child illustration.jpg', alt: 'Cough and cold care', test: /cough|\bcold\b|sneez|runny nose|stuffy nose|blocked nose|throat|tonsil|strep|phlegm|mucus|congest|wheez|\bflu\b|kh[aā]a?nsi|[jz]ukaa?m|nazla|\bgal[aei]\b|खांसी|जुकाम|सर्दी|गला|गले/i },
+  { file: 'stomach.jpg', alt: 'Tummy ache and ORS', test: /vomit|diarrh|loose motion|stomach|tummy|\bulti\b|\bdast\b|pet dard|उल्टी|दस्त|पेट/i },
   { file: 'skin-rash.jpg', alt: 'Gentle skin care', test: /rash|itch|eczema|skin|चकत्त|खुजली|त्वचा/i },
-  { file: 'first-aid.jpg', alt: 'First-aid kit', test: /first[- ]aid|wound|cut|burn|bleed|sprain|bite|घाव|जल/i },
+  { file: 'first-aid.jpg', alt: 'First-aid kit', test: /first[- ]aid|wound|\bcuts?\b|\bburns?\b|bleed|sprain|\bbites?\b|घाव|जलना|जले/i },
   { file: 'pregnancy.jpg', alt: 'Healthy pregnancy', test: /pregnan|trimester|prenatal|गर्भ/i },
   { file: 'baby-care.jpg', alt: 'Mother holding a newborn', test: /newborn|breastfe|infant|baby|शिशु|नवजात/i },
   { file: 'child-growth.jpg', alt: 'Toddler growth check', test: /milestone|growth|height|weight gain|development|विकास/i },
@@ -19,7 +19,7 @@ const TOPICS: { file: string; alt: string; test: RegExp }[] = [
   { file: 'exercise.jpg', alt: 'Walking and yoga', test: /exercis|workout|walk|yoga|fitness|steps|व्यायाम|योग/i },
   { file: 'medicine pills illustration.jpg', alt: 'Medicines and pill box', test: /medicin|tablet|syrup|dose|paracetamol|antibiotic|दवा/i },
   { file: 'lab-report.jpg', alt: 'Reading a lab report', test: /report|lab test|blood test|hemoglobin|cbc|prescription|रिपोर्ट/i },
-  { file: 'indian thali illustration.jpg', alt: 'Balanced Indian thali', test: /meal|diet|food|nutrition|breakfast|lunch|dinner|protein|खाना|भोजन|आहार/i },
+  { file: 'indian thali illustration.jpg', alt: 'Balanced Indian thali', test: /meal|diet|food|\beat(ing)?\b|nutrition|breakfast|lunch|dinner|protein|weight loss|lose weight|\bkhana\b|खाना|भोजन|आहार/i },
   { file: 'hydration.jpg', alt: 'Water, ORS and coconut water', test: /dehydrat|hydrat|\bors\b|fluids/i },
   { file: 'hygiene.jpg', alt: 'Washing hands with soap', test: /hand ?wash|hygien|wash hands|sanitiz|हाथ धो/i },
   { file: 'rest-sleep.jpg', alt: 'Resting and sleeping well', test: /\bsleep|insomnia|नींद/i },
@@ -30,11 +30,29 @@ const GENERAL = { file: 'health care heart illustration.jpg', alt: 'Health and w
 
 export type ReplyImage = { src: string; alt: string }
 
+function countMatches(test: RegExp, text: string): number {
+  return text.match(new RegExp(test.source, 'gi'))?.length ?? 0
+}
+
+/** The question decides the topic; the reply only breaks ties or fills in when the question is vague. */
+function pickTopic(question: string, reply: string) {
+  let best: (typeof TOPICS)[number] | null = null
+  let bestScore = 0
+  for (const topic of TOPICS) {
+    const score = countMatches(topic.test, question) * 100 + countMatches(topic.test, reply)
+    if (score > bestScore) {
+      best = topic
+      bestScore = score
+    }
+  }
+  return best ?? GENERAL
+}
+
 export function replyImageFor(question: string, reply: string): ReplyImage | null {
   const words = reply.trim().split(/\s+/).length
   const substantial = words >= 30 && /\n\s*([-*]|\d+\.)\s|\n#/.test(reply)
   if (!substantial) return null
-  const topic = TOPICS.find((t) => t.test.test(question)) ?? TOPICS.find((t) => t.test.test(reply)) ?? GENERAL
+  const topic = pickTopic(question, reply)
   return { src: `/sendimage/${encodeURIComponent(topic.file)}`, alt: topic.alt }
 }
 

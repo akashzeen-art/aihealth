@@ -185,13 +185,6 @@ export default function ChatWindow({
         {sending && (
           <TypingIndicator label={processingLabel} presenceState="processing" />
         )}
-        {showFollowUps && (
-          <FollowUpSuggestions
-            suggestions={followUps}
-            disabled={sending}
-            onPick={applySuggestion}
-          />
-        )}
         <div ref={spacerRef} className="cg-chat-spacer" aria-hidden="true" />
       </div>
 
@@ -199,6 +192,13 @@ export default function ChatWindow({
         {messages.length === 0 ? (
           <ContextChips chips={chips} disabled={sending || loading} onPick={applySuggestion} />
         ) : null}
+        {showFollowUps && (
+          <FollowUpSuggestions
+            suggestions={followUps}
+            disabled={sending}
+            onPick={applySuggestion}
+          />
+        )}
         <form
           className={`cg-composer ${attachControl ? 'has-attach' : 'no-attach'}`.trim()}
           onSubmit={(e) => {

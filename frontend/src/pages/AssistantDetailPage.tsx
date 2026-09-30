@@ -118,6 +118,12 @@ export default function AssistantDetailPage() {
   }, [refreshList])
 
   useEffect(() => {
+    const root = document.documentElement
+    root.classList.add('cg-chat-scale')
+    return () => root.classList.remove('cg-chat-scale')
+  }, [])
+
+  useEffect(() => {
     setLanguage(user?.preferredLanguage || 'en')
   }, [user?.preferredLanguage])
 
@@ -438,10 +444,7 @@ export default function AssistantDetailPage() {
           }
           banner={
             catalog.showEmergencyWarning ? (
-              <EmergencyCallout>
-                If someone is in immediate danger, call your local emergency number now. This guide
-                is educational and not a substitute for emergency services.
-              </EmergencyCallout>
+              <EmergencyCallout title="Emergency?">Call your local emergency number now.</EmergencyCallout>
             ) : null
           }
           contextHeader={

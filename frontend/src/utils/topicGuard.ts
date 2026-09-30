@@ -31,7 +31,7 @@ const HEALTH =
 
 const COPY: Record<Lang, { greeting: string; thanks: string; offTopic: (name: string) => string }> = {
   en: {
-    greeting: 'Hello! 👋 Ask me any health question — symptoms, home remedies, diet or medicines.',
+    greeting: 'Hello! 👋 Ask me any health question.',
     thanks: "You're welcome! 😊 Ask anytime you have another health question.",
     offTopic: (name) =>
       `I'm the ${name} and can only help with health questions. 🩺 Try asking about symptoms, home remedies, diet or medicines.`,
@@ -67,11 +67,19 @@ function toLang(language?: string): Lang {
   return (['en', 'hi', 'fr', 'sw', 'ar'] as const).includes(code as Lang) ? (code as Lang) : 'en'
 }
 
-export function localReply(message: string, language: string | undefined, assistantName: string): string | null {
+export function localReply(
+  message: string,
+  language: string | undefined,
+  assistantName: string,
+  offer?: string | null,
+): string | null {
   const text = message.trim()
   if (!text) return null
-  const copy = COPY[toLang(language)]
-  if (GREETING.test(text)) return copy.greeting
+  const lang = toLang(language)
+  const copy = COPY[lang]
+  if (GREETING.test(text)) {
+    return lang === 'en' && offer ? `Hello! 👋 I'm the **${assistantName}**. ${offer}` : copy.greeting
+  }
   if (THANKS.test(text)) return copy.thanks
   if (OFF_TOPIC.test(text) && !HEALTH.test(text)) return copy.offTopic(assistantName)
   return null

@@ -37,10 +37,16 @@ export function WarningCallout({ children }: { children: ReactNode }) {
   )
 }
 
-export function EmergencyCallout({ children }: { children: ReactNode }) {
+export function EmergencyCallout({
+  children,
+  title = 'Emergency — act first',
+}: {
+  children: ReactNode
+  title?: string
+}) {
   return (
     <aside className="cg-safety-notice tone-emergency" role="alert">
-      <strong className="cg-safety-notice-title">Emergency — act first</strong>
+      <strong className="cg-safety-notice-title">{title}</strong>
       <div className="cg-safety-notice-body">{children}</div>
     </aside>
   )

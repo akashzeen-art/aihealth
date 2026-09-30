@@ -10,11 +10,11 @@
   --chat-border: rgba(15, 37, 55, 0.12);
   --chat-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --assistant-accent: var(--chat-teal);
-  max-width: 1240px;
+  max-width: 88rem;
   margin: 0 auto;
   padding: 0.85rem 1.15rem 1.35rem;
   display: grid;
-  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
+  grid-template-columns: minmax(15.625rem, 18.75rem) minmax(0, 1fr);
   gap: 0.95rem;
   align-items: stretch;
   min-height: calc(100vh - 5.25rem);
@@ -776,6 +776,43 @@
 .cg-chat-page .cg-followups button:hover {
   background: #f5fbdf;
   border-color: color-mix(in srgb, var(--chat-lime) 55%, var(--chat-border));
+}
+
+/* Follow-ups pinned directly above the composer */
+.cg-chat-page .cg-composer-shell .cg-followups {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.cg-chat-page .cg-composer-shell .cg-followups-label {
+  flex-shrink: 0;
+  margin: 0;
+  font-size: 0.66rem;
+}
+
+.cg-chat-page .cg-composer-shell .cg-followups-row {
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cg-chat-page .cg-composer-shell .cg-followups-row::-webkit-scrollbar {
+  display: none;
+}
+
+.cg-chat-page .cg-composer-shell .cg-followups button {
+  flex-shrink: 0;
+  padding: 0.28rem 0.7rem;
+  font-size: 0.76rem;
+  white-space: nowrap;
 }
 
 @media (max-width: 900px) {
@@ -2003,18 +2040,17 @@
 .cg-reply-image {
   margin: 0.4rem 0 0.8rem;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid rgba(15, 37, 55, 0.08);
   background: #f4f8fa;
-  aspect-ratio: 16 / 7;
-  max-height: 200px;
-  width: 100%;
+  width: min(100%, 17.5rem);
 }
 
 .cg-reply-image img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: 11.25rem;
   object-fit: cover;
   animation: cg-msg-in 0.4s ease-out;
 }
@@ -2254,7 +2290,7 @@
 /* Reading width */
 .cg-chat-page.assistant-detail .cg-response-card {
   width: 100%;
-  max-width: 46rem;
+  max-width: 54rem;
 }
 
 .cg-chat-page.assistant-detail .cg-msg-user {
@@ -2303,6 +2339,120 @@
 
 .cg-chat-page .cg-msg-user {
   scroll-margin-top: 5.5rem;
+}
+
+/* Chat pages render denser on desktop: the whole rem-based UI scales with the root size */
+@media (min-width: 901px) {
+  html.cg-chat-scale {
+    font-size: clamp(13.5px, 0.94vw, 16px);
+  }
+}
+
+/* Compact sidebar identity card: icon beside the title, slim safety note */
+.cg-chat-page.assistant-detail .assistant-detail-identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.6rem;
+  row-gap: 0.1rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.cg-chat-page.assistant-detail .assistant-detail-identity .assistant-feature-icon {
+  grid-row: span 2;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.65rem;
+}
+
+.cg-chat-page.assistant-detail .assistant-detail-identity h1 {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.2;
+}
+
+.cg-chat-page.assistant-detail .assistant-detail-identity > p {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.3;
+}
+
+.cg-chat-page.assistant-detail .assistant-detail-safety {
+  grid-column: 1 / -1;
+  margin-top: 0.4rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.cg-chat-page.assistant-detail .assistant-detail-safety strong {
+  margin-bottom: 0;
+  font-size: 0.68rem;
+}
+
+@media (min-width: 901px) {
+  .cg-chat-page.assistant-detail {
+    --cg-nav-h: 3.15rem;
+  }
+}
+
+/* Compact assistant header and one-line emergency strip */
+.cg-chat-page.assistant-detail .cg-context-header {
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.9rem;
+}
+
+.cg-chat-page.assistant-detail .cg-context-header-main {
+  gap: 0.4rem 0.8rem;
+}
+
+.cg-chat-page.assistant-detail .cg-context-title-row {
+  gap: 0.55rem;
+}
+
+.cg-chat-page.assistant-detail .cg-context-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.65rem;
+}
+
+.cg-chat-page.assistant-detail .cg-context-icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.cg-chat-page.assistant-detail .cg-context-title {
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+.cg-chat-page.assistant-detail .cg-context-purpose {
+  margin-top: 0;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.cg-chat-page.assistant-detail .cg-context-status,
+.cg-chat-page.assistant-detail .cg-context-meta .cg-safety-badge {
+  padding: 0.2rem 0.55rem;
+  font-size: 0.7rem;
+}
+
+.cg-chat-page.assistant-detail .cg-more-trigger {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.cg-chat-page.assistant-detail .cg-safety-notice.tone-emergency {
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.cg-chat-page.assistant-detail .cg-safety-notice.tone-emergency .cg-safety-notice-title {
+  font-size: 0.78rem;
 }
 
 .cg-chat-spacer {

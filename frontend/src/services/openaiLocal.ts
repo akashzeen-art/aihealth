@@ -1,4 +1,4 @@
-import { assistantScopeName, buildSystemPrompt } from '../prompts/assistantPrompts'
+import { assistantOffer, assistantScopeName, buildSystemPrompt } from '../prompts/assistantPrompts'
 import { localReply } from '../utils/topicGuard'
 import { ApiError } from './apiClient'
 import { detectDiet, dietConstraint, dietCorrection } from '../utils/dietGuard'
@@ -46,7 +46,12 @@ export async function completeChat(options: {
 }): Promise<string> {
   const lastUser = [...options.history].reverse().find((turn) => turn.role === 'user')
   const canned = lastUser
-    ? localReply(lastUser.content, options.language, assistantScopeName(options.assistantCode))
+    ? localReply(
+        lastUser.content,
+        options.language,
+        assistantScopeName(options.assistantCode),
+        assistantOffer(options.assistantCode),
+      )
     : null
   if (canned) return canned
 
