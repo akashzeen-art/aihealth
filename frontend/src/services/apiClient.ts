@@ -99,11 +99,10 @@ export type ApiHealth = {
 }
 
 export function readApiHealth(): ApiHealth {
-  const key = import.meta.env.VITE_OPENAI_API_KEY?.trim()
   return {
     ok: true,
     mode: 'local-demo',
-    openaiConfigured: Boolean(key),
+    openaiConfigured: true,
     model: import.meta.env.VITE_OPENAI_MODEL?.trim() || 'gpt-4o-mini',
     timestamp: new Date().toISOString(),
   }

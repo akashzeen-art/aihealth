@@ -50,14 +50,6 @@ export async function completeChat(options: {
     : null
   if (canned) return canned
 
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY?.trim()
-  if (!apiKey) {
-    throw new ApiError(
-      'OpenAI is not configured. Add VITE_OPENAI_API_KEY to frontend/.env and restart npm run dev.',
-      { code: 'CONFIG', status: 503 },
-    )
-  }
-
   let system = buildSystemPrompt({
     assistantCode: options.assistantCode,
     language: options.language,
@@ -76,14 +68,13 @@ export async function completeChat(options: {
     { role: 'system', content: system },
     ...withoutPastRefusals(options.history),
   ]
-  const reply = await requestCompletion(apiKey, messages, options.signal)
+  const reply = await requestCompletion(messages, options.signal)
   if (!diet) return reply
 
   const correction = dietCorrection(reply, diet)
   if (!correction) return reply
 
   const retry = await requestCompletion(
-    apiKey,
     [...messages, { role: 'assistant', content: reply }, { role: 'user', content: correction }],
     options.signal,
   )
@@ -91,7 +82,6 @@ export async function completeChat(options: {
 }
 
 async function requestCompletion(
-  apiKey: string,
   messages: ChatTurn[],
   signal?: AbortSignal,
 ): Promise<string> {
@@ -108,10 +98,7 @@ async function requestCompletion(
   try {
     res = await fetch(`${openaiBaseUrl()}/v1/chat/completions`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
       signal: options.signal,
     })
