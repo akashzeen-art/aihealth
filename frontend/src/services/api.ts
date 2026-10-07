@@ -1,5 +1,5 @@
 /**
- * CareGuide API surface — local demo storage + optional OpenAI chat.
+ * Care+ API surface — local demo storage + optional OpenAI chat.
  * Pages should prefer importing from here for a stable contract.
  */
 export { ApiError, isApiError, readApiHealth, toApiError, withApi } from './apiClient'

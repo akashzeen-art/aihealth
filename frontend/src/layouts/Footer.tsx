@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="cg-footer-brand">
           <Link to="/" className="cg-footer-logo" aria-label={`${BRAND.name} home`}>
             <span className="cg-footer-mark" aria-hidden="true">
-              <img src="/images/careguidelogo.png" alt="" width={1024} height={720} />
+              <img src="/images/careplus-logo.png" alt="" width={1191} height={1152} />
             </span>
           </Link>
           <p className="cg-footer-tagline">{BRAND.tagline}</p>

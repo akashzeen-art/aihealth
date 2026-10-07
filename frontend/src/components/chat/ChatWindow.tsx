@@ -214,7 +214,7 @@ export default function ChatWindow({
           </div>
           {attachControl}
           <label className="sr-only" htmlFor="assistant-question">
-            Ask CareGuide
+            Ask Care+
           </label>
           <textarea
             ref={areaRef}
@@ -228,7 +228,7 @@ export default function ChatWindow({
                 onSend()
               }
             }}
-            placeholder="Ask CareGuide…"
+            placeholder="Ask Care+…"
             disabled={sending || loading}
             autoComplete="off"
             aria-required="true"

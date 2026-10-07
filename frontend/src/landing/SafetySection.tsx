@@ -12,7 +12,7 @@ export default function SafetySection() {
 
         <div className="lp-safety-grid">
           <article>
-            <h3>CareGuide can</h3>
+            <h3>Care+ can</h3>
             <ul>
               <li>Provide general health education</li>
               <li>Offer plain-language explanations</li>
@@ -20,7 +20,7 @@ export default function SafetySection() {
             </ul>
           </article>
           <article>
-            <h3>CareGuide is not</h3>
+            <h3>Care+ is not</h3>
             <ul>
               <li>A doctor</li>
               <li>A diagnosis tool</li>

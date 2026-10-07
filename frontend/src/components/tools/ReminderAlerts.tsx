@@ -21,7 +21,7 @@ export default function ReminderAlerts() {
             new Notification(`${BRAND.name}: ${REMINDER_KIND_LABELS[r.kind]} reminder`, {
               body: r.notes ? `${r.title}\n${r.notes}` : r.title,
               tag: r.id,
-              icon: '/images/careguidelogo.png',
+              icon: '/images/careplus-logo.png',
             })
           } catch {
             /* some browsers only allow notifications from a service worker */

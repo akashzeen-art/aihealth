@@ -1,6 +1,6 @@
-# CareGuide frontend
+# Care+ frontend
 
-React + Vite + TypeScript client for **CareGuide**.
+React + Vite + TypeScript client for **Care+**.
 
 For the full project documentation (features, assistants, architecture, setup, and safety notes), see the root **[README.md](../README.md)**.
 

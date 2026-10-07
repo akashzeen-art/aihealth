@@ -20,7 +20,7 @@ export default function LanguageShowcase() {
           <p className="lp-eyebrow">Languages</p>
           <h2>Meet people in the language they prefer</h2>
           <p className="lp-section-lead">
-            CareGuide can respond in English, Hindi, French, Swahili, or Arabic. Translations are
+            Care+ can respond in English, Hindi, French, Swahili, or Arabic. Translations are
             educational aids — clinical meaning should still be confirmed with your care team.
           </p>
         </header>

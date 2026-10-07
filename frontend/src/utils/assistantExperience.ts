@@ -244,7 +244,7 @@ export const ASSISTANT_EXPERIENCE: Record<AssistantSlug, AssistantExperience> = 
     ],
     chips: ['Plan reminders', 'Review my reminders', 'Family reminders'],
     followUps: [
-      'How do I add these in CareGuide?',
+      'How do I add these in Care+?',
       'Add a refill reminder too',
       'Summarize my day',
     ],

@@ -16,11 +16,11 @@ function BrandMark({ to }: { to: string }) {
   return (
     <Link to={to} className="cg-nav-brand" aria-label={`${BRAND.name} home`}>
       <img
-        src="/images/careguidelogo.png"
+        src="/images/careplus-logo.png"
         alt=""
         className="cg-nav-logo"
-        width={1024}
-        height={720}
+        width={1191}
+        height={1152}
       />
     </Link>
   )

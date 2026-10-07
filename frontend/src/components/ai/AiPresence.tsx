@@ -15,7 +15,7 @@ export default function AiPresence({
     <div
       className={`cg-ai-presence size-${size} state-${state} ${className}`.trim()}
       role="img"
-      aria-label={label || `CareGuide is ${state}`}
+      aria-label={label || `Care+ is ${state}`}
     >
       <span className="cg-ai-presence-ring r1" aria-hidden="true" />
       <span className="cg-ai-presence-ring r2" aria-hidden="true" />

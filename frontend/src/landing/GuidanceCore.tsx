@@ -2,7 +2,7 @@ export type GuidanceCoreState = 'idle' | 'question' | 'understanding' | 'explana
 
 const ORBIT = ['Understand', 'Explore', 'Learn', 'Translate', 'Read', 'Ask'] as const
 
-/** Abstract CareGuide Guidance Core — organic + digital, not a “brain”. */
+/** Abstract Care+ Guidance Core — organic + digital, not a “brain”. */
 export default function GuidanceCore({
   className = '',
   state = 'idle',

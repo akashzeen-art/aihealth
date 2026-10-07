@@ -5,7 +5,7 @@ import AiPresence from '../components/ai/AiPresence'
 
 const STEPS = [
   { title: 'Question', copy: 'You bring a health topic you want to understand.' },
-  { title: 'Understand', copy: 'CareGuide clarifies language and context.' },
+  { title: 'Understand', copy: 'Care+ clarifies language and context.' },
   { title: 'Explore', copy: 'Specialized companions match the kind of question.' },
   { title: 'Learn', copy: 'Plain-language education with clear boundaries.' },
   { title: 'Next step', copy: 'Know when to ask a clinician or seek urgent care.' },
@@ -30,7 +30,7 @@ export default function AboutPage() {
         or emergency service.
       </EducationalDisclaimer>
 
-      <section className="cg-about-journey" aria-label="How CareGuide helps">
+      <section className="cg-about-journey" aria-label="How Care+ helps">
         <h2>How understanding unfolds</h2>
         <ol className="cg-about-steps">
           {STEPS.map((s, i) => (
@@ -67,9 +67,9 @@ export default function AboutPage() {
         <h2>Get started</h2>
         <p>
           <Link to="/" className="btn btn-primary btn-sm">
-            Open CareGuide
+            Open Care+
           </Link>{' '}
-          — no account needed. <Link to="/signup">Sign up</Link> if you want CareGuide to know your
+          — no account needed. <Link to="/signup">Sign up</Link> if you want Care+ to know your
           name, language and country. Everything stays in this browser.
         </p>
       </section>

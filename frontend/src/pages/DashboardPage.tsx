@@ -97,7 +97,7 @@ export default function DashboardPage() {
         }
       } catch (err) {
         if (controller.signal.aborted) return
-        setError(getErrorMessage(err, 'Could not load your CareGuide space'))
+        setError(getErrorMessage(err, 'Could not load your Care+ space'))
       } finally {
         if (!controller.signal.aborted) setLoading(false)
       }
@@ -224,14 +224,14 @@ export default function DashboardPage() {
 
       <section className="cg-dash-ask" aria-labelledby="dash-ask-heading">
         <h2 id="dash-ask-heading" className="sr-only">
-          Ask CareGuide
+          Ask Care+
         </h2>
         <form className="cg-dash-composer" onSubmit={handleComposer}>
           <span className="cg-dash-composer-ico" aria-hidden="true">
             <DashIcon name="spark" />
           </span>
           <label className="sr-only" htmlFor="cg-dash-composer">
-            Ask CareGuide
+            Ask Care+
           </label>
           <input
             id="cg-dash-composer"
@@ -261,7 +261,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <ul className="cg-home-stats" aria-label="What CareGuide offers">
+      <ul className="cg-home-stats" aria-label="What Care+ offers">
         <li>
           <strong>15</strong>
           <span>specialist assistants</span>

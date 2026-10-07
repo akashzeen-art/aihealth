@@ -281,7 +281,7 @@ export default function AssistantDetailPage() {
     } catch (err) {
       setLastFailed(content)
       setError(
-        getErrorMessage(err, "CareGuide couldn't connect to the AI service."),
+        getErrorMessage(err, "Care+ couldn't connect to the AI service."),
       )
       if (conversationId) {
         try {
