@@ -1,4 +1,4 @@
-/** Shared CareGuide localStorage key names (avoid circular imports). */
+/** Shared Care+ localStorage key names (avoid circular imports). */
 
 export const ACCESS_KEY = 'careguide_token'
 export const REFRESH_KEY = 'careguide_refresh'

@@ -8,7 +8,7 @@ export default function FinalCTA() {
       <div className="lp-shell lp-final-grid">
         <div className="lp-final-copy">
           <h2>Start with a question.</h2>
-          <p>Explore CareGuide and find a clearer way to understand health information.</p>
+          <p>Explore Care+ and find a clearer way to understand health information.</p>
           <Link to="/dashboard" className="lp-btn lp-btn-primary">
             Get Started →
           </Link>

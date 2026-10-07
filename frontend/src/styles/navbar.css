@@ -1,4 +1,4 @@
-/* CareGuide navbar — unified Demo UI bar (all pages) */
+/* Care+ navbar — unified Demo UI bar (all pages) */
 
 body.cg-nav-lock {
   overflow: hidden;
@@ -70,7 +70,7 @@ body.cg-nav-lock {
 
 .cg-nav-logo {
   display: block;
-  height: 2.75rem;
+  height: 3.1rem;
   width: auto;
 }
 

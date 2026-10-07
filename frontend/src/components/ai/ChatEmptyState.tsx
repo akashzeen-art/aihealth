@@ -11,7 +11,7 @@ export default function ChatEmptyState({
 }) {
   return (
     <div className="cg-chat-empty">
-      <AiPresence state="idle" size="lg" label="CareGuide ready" />
+      <AiPresence state="idle" size="lg" label="Care+ ready" />
       <h2 className="cg-chat-empty-title">{title}</h2>
       <p className="cg-chat-empty-lead">
         Choose a starting point or type your own question. Replies are educational — not a diagnosis.

@@ -1,4 +1,4 @@
-/** Shared client helpers for CareGuide local + OpenAI-backed APIs. */
+/** Shared client helpers for Care+ local + OpenAI-backed APIs. */
 
 export class ApiError extends Error {
   readonly code: string

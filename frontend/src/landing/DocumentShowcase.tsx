@@ -40,7 +40,7 @@ export default function DocumentShowcase() {
 
           <article className="lp-docs-explain" aria-label="AI explanation preview">
             <header>
-              <span className="lp-docs-tag is-ai">CareGuide</span>
+              <span className="lp-docs-tag is-ai">Care+</span>
               <strong>Plain-language explanation</strong>
             </header>
             <p>
@@ -50,7 +50,7 @@ export default function DocumentShowcase() {
             <ul>
               <li>What the document seems to cover</li>
               <li>Terms that may need clarifying</li>
-              <li>What CareGuide does not conclude</li>
+              <li>What Care+ does not conclude</li>
             </ul>
             <p className="lp-docs-note">
               Educational only — not clinical validation of values or results.

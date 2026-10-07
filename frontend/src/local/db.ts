@@ -54,7 +54,7 @@ function estimateBytes(value: string): number {
   return value.length * 2
 }
 
-/** Drop orphan data keys and shrink the largest CareGuide payloads. */
+/** Drop orphan data keys and shrink the largest Care+ payloads. */
 export function reclaimLocalStorage(
   preserveKey?: string,
   options?: { aggressive?: boolean },
@@ -91,7 +91,7 @@ export function reclaimLocalStorage(
   }
 
   if (aggressive) {
-    // Drop non-essential CareGuide keys except auth session + accounts
+    // Drop non-essential Care+ keys except auth session + accounts
     const keep = new Set([
       USERS_KEY,
       USER_KEY,
@@ -241,7 +241,7 @@ export function writeUserData(userId: string, data: UserData) {
       localStorage.removeItem(dataKey(userId))
       localStorage.setItem(dataKey(userId), JSON.stringify(emptyData()))
       throw new Error(
-        'Browser storage is full. Older conversations/documents were cleared so CareGuide can continue.',
+        'Browser storage is full. Older conversations/documents were cleared so Care+ can continue.',
       )
     }
   }

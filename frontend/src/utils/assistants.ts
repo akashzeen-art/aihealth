@@ -224,7 +224,7 @@ export const ASSISTANT_CATALOG: AssistantCatalogItem[] = [
     accent: 'slate',
     tool: REMINDERS_TOOL,
     safetyInfo:
-      'Reminders work while CareGuide is open in your browser — keep a backup alarm for critical doses.',
+      'Reminders work while Care+ is open in your browser — keep a backup alarm for critical doses.',
   },
 ]
 
@@ -275,7 +275,7 @@ export function getAssistantById(id: string): AssistantCatalogItem | undefined {
     id: id.toUpperCase().replace(/-/g, '_'),
     slug,
     name: id.replace(/[_-]/g, ' '),
-    description: 'Educational CareGuide companion.',
+    description: 'Educational Care+ companion.',
     target: 'Everyone',
     iconKey: 'heart-pulse',
     accent: 'teal',

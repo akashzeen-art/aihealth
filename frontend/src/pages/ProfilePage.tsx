@@ -102,7 +102,7 @@ export default function ProfilePage() {
     )
   }
 
-  const initials = profileInitials(name || 'CareGuide')
+  const initials = profileInitials(name || 'Care+')
   const rawFirst = name.trim().split(/\s+/)[0]
   const firstName = rawFirst && rawFirst !== 'Friend' ? rawFirst : 'there'
   const safetyOk = hasOnboardingAck()
@@ -122,7 +122,7 @@ export default function ProfilePage() {
           </p>
           <h1>Hello, {firstName}</h1>
           <p className="cg-profile-lead">
-            Preferences for how CareGuide addresses you — safety rules stay the same.
+            Preferences for how Care+ addresses you — safety rules stay the same.
           </p>
           <div className="cg-profile-hero-meta">
             <span className="cg-profile-pill">
@@ -153,7 +153,7 @@ export default function ProfilePage() {
           <section className="cg-profile-card" aria-labelledby="profile-info-heading">
             <div className="cg-profile-card-head">
               <h2 id="profile-info-heading">Profile</h2>
-              <p>How you appear in CareGuide</p>
+              <p>How you appear in Care+</p>
             </div>
 
             <label className="cg-profile-field">
@@ -232,7 +232,7 @@ export default function ProfilePage() {
               <SafetyBadge label={safetyOk ? 'Acknowledged' : 'Pending'} />
               <p>
                 {safetyOk
-                  ? 'You confirmed CareGuide is educational only.'
+                  ? 'You confirmed Care+ is educational only.'
                   : 'Safety acknowledgement will appear when required.'}
               </p>
             </div>
@@ -248,7 +248,7 @@ export default function ProfilePage() {
               <p>Demo storage in this browser</p>
             </div>
             <EducationalDisclaimer>
-              Your CareGuide demo data is stored locally. Clearing site data removes conversations
+              Your Care+ demo data is stored locally. Clearing site data removes conversations
               and documents stored in this browser. This is not a clinic record.
             </EducationalDisclaimer>
           </section>

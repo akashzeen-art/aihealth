@@ -54,7 +54,7 @@ export default function AssistantShowcase() {
           <p className="lp-eyebrow">Assistants</p>
           <h2>Choose how you&apos;d like to explore</h2>
           <p className="lp-section-lead">
-            Each CareGuide assistant supports a different kind of health-information journey — with
+            Each Care+ assistant supports a different kind of health-information journey — with
             the same educational boundaries.
           </p>
         </header>
@@ -64,7 +64,7 @@ export default function AssistantShowcase() {
             className="lp-assist-list"
             role="tablist"
             aria-orientation="vertical"
-            aria-label="CareGuide assistants"
+            aria-label="Care+ assistants"
           >
             {ASSISTANT_CATALOG.map((a) => {
               const active = a.slug === slug

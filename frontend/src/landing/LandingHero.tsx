@@ -37,7 +37,7 @@ export default function LandingHero() {
         <div className="lp-hero-copy" data-parallax="mid">
           <p className="lp-eyebrow lp-hero-in" style={{ ['--d' as string]: '0ms' }}>
             <span className="lp-eyebrow-dot" aria-hidden="true" />
-            CareGuide
+            Care+
           </p>
           <h1 id="landing-headline" className="lp-hero-in" style={{ ['--d' as string]: '70ms' }}>
             Clearer answers

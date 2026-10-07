@@ -25,7 +25,7 @@ export default function EmptyState({
 /** Branded copy helpers for common empties */
 export const EMPTY_COPY = {
   conversations: {
-    title: 'Your CareGuide journey starts here.',
+    title: 'Your Care+ journey starts here.',
     description: 'Start a companion chat. Your conversations will appear as a calm timeline.',
   },
   documents: {

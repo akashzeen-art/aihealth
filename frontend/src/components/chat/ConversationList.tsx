@@ -27,7 +27,7 @@ export default function ConversationList({
   if (conversations.length === 0) {
     return (
       <EmptyState
-        title="Your CareGuide journey starts here."
+        title="Your Care+ journey starts here."
         description="Start a chat with this companion. Your timeline will appear here."
       />
     )

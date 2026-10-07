@@ -4,7 +4,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion'
 import { BRAND } from '../brand'
 
 /**
- * Healthcare-oriented CareGuide workspace mockup for the landing hero.
+ * Healthcare-oriented Care+ workspace mockup for the landing hero.
  * Decorative only — not interactive chat. No fake vitals or scores.
  */
 export default function ProductPreview({

@@ -1,4 +1,4 @@
-/* CareGuide site footer — Demo navy · lime · mist */
+/* Care+ site footer — Demo navy · lime · mist */
 
 .cg-site-footer.site-footer {
   --ft-navy: #0f2537;
@@ -79,7 +79,7 @@
 
 .cg-site-footer .cg-footer-mark img {
   display: block;
-  height: 3.1rem;
+  height: 3.75rem;
   width: auto;
   max-width: none;
 }

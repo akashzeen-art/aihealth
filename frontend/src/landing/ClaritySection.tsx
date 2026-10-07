@@ -6,7 +6,7 @@ export default function ClaritySection() {
       <div className="lp-shell lp-clarity-inner">
         <h2 className="lp-clarity-statement">
           Health information can be difficult to understand.
-          <span>CareGuide helps you explore it more clearly.</span>
+          <span>Care+ helps you explore it more clearly.</span>
         </h2>
 
         <ol className="lp-transform" aria-label="How understanding improves">

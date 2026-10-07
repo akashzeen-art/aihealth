@@ -373,7 +373,7 @@ export function userDataContextFor(assistantCode: string, userId: string): strin
     const list = data.reminders.filter((r) => kinds === 'all' || kinds.includes(r.kind))
     if (list.length) {
       parts.push(
-        `Reminders set in CareGuide (${list.length}):`,
+        `Reminders set in Care+ (${list.length}):`,
         ...list.map(
           (r) =>
             `- [${REMINDER_KIND_LABELS[r.kind]}] ${r.title} — ${r.time}, ${r.repeat === 'once' ? `on ${r.date}` : r.repeat}${r.active ? '' : ' (paused)'}${r.notes ? ` — ${r.notes}` : ''}`,

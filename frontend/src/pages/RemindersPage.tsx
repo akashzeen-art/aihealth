@@ -142,7 +142,7 @@ export default function RemindersPage() {
         <h1>Reminders</h1>
         <p className="cg-tools-lead">
           Medication, appointment, vaccination and measurement reminders for you and your family.
-          Reminders pop up while CareGuide is open in your browser.
+          Reminders pop up while Care+ is open in your browser.
         </p>
         <div className="cg-tools-hero-actions">
           {permission === 'granted' ? (

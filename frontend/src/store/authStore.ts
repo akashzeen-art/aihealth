@@ -38,7 +38,7 @@ function persistSession(user: User) {
 }
 
 /**
- * CareGuide has no sign-in: everything is stored under one local profile in this browser.
+ * Care+ has no sign-in: everything is stored under one local profile in this browser.
  * Reuses the last active profile when present so existing chats, readings and reminders stay.
  */
 function ensureLocalUser(): User {
